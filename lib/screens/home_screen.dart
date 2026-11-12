@@ -3,9 +3,17 @@ import 'package:flutter/material.dart';
 import '../components/home_header.dart';
 import '../components/overview_card.dart';
 import '../components/home_book_section.dart';
+import '../components/home_bottom_navigation.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +58,16 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+
+      // Thanh điều hướng phía dưới
+      bottomNavigationBar: HomeBottomNavigation(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
       ),
     );
   }
