@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/overview_card.dart';
 import '../components/home_header.dart';
+import '../components/home_book_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -18,6 +19,7 @@ class HomeScreen extends StatelessWidget {
               HomeHeader(),
               SizedBox(height: 20),
               OverviewCard(),
+              HomeBookCard(),
             ],
           ),
         ),
