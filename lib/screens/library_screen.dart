@@ -21,7 +21,7 @@ class LibraryScreen extends StatefulWidget {
 
   final BookCatalog repository;
   final ValueChanged<int> onTabSelected;
-  final VoidCallback? onAddBook;
+  final Future<bool> Function()? onAddBook;
 
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
@@ -93,6 +93,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
+  Future<void> _handleAddBook() async {
+    final openForm = widget.onAddBook;
+    if (openForm == null) return;
+    final added = await openForm();
+    if (!mounted || !added) return;
+    await _refresh();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Đã thêm sách thành công.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +117,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       floatingActionButton: widget.onAddBook == null
           ? null
           : FloatingActionButton(
-              onPressed: widget.onAddBook,
+              onPressed: _handleAddBook,
               backgroundColor: libraryGreen,
               foregroundColor: Colors.white,
               tooltip: 'Thêm sách',
@@ -133,7 +146,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 title: 'Thư viện của bạn đang trống',
                 description: 'Thêm cuốn sách đầu tiên để bắt đầu quản lý hành trình đọc.',
                 action: widget.onAddBook == null ? null : 'Thêm sách đầu tiên',
-                onAction: widget.onAddBook,
+                onAction: widget.onAddBook == null ? null : _handleAddBook,
               );
             }
             return _bookList(all);

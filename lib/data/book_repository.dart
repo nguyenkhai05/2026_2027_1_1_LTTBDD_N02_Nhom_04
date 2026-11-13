@@ -7,8 +7,13 @@ abstract interface class BookCatalog {
   Future<bool> update(Book book);
 }
 
+/// Adds creation to the read/update operations used by the app shell.
+abstract interface class BookStore implements BookCatalog {
+  Future<int> insert(Book book);
+}
+
 /// Local CRUD operations shared by the library, home and statistics screens.
-class BookRepository implements BookCatalog {
+class BookRepository implements BookStore {
   BookRepository(this._storage);
 
   final BookDatabase _storage;
@@ -31,6 +36,7 @@ class BookRepository implements BookCatalog {
     return rows.isEmpty ? null : Book.fromDatabaseMap(rows.single);
   }
 
+  @override
   Future<int> insert(Book book) async {
     if (book.id != null) {
       throw ArgumentError.value(book.id, 'book.id', 'Must be null for insert');
