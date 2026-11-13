@@ -5,15 +5,10 @@ import '../components/overview_card.dart';
 import '../components/home_book_section.dart';
 import '../components/home_bottom_navigation.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key, required this.onTabSelected});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 0;
+  final ValueChanged<int> onTabSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Thanh điều hướng phía dưới
       bottomNavigationBar: HomeBottomNavigation(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
+        currentIndex: 0,
+        onTap: onTabSelected,
       ),
     );
   }

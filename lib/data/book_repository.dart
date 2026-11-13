@@ -1,24 +1,33 @@
 import '../models/book.dart';
 import 'book_database.dart';
 
+/// Operations the library screen needs from local storage.
+abstract interface class BookCatalog {
+  Future<List<Book>> getAll();
+  Future<bool> update(Book book);
+}
+
 /// Local CRUD operations shared by the library, home and statistics screens.
-class BookRepository {
+class BookRepository implements BookCatalog {
   BookRepository(this._storage);
 
   final BookDatabase _storage;
 
+  @override
   Future<List<Book>> getAll() async {
     final db = await _storage.connection;
-    final rows = await db.query(
-      'books',
-      orderBy: 'created_at DESC, id DESC',
-    );
+    final rows = await db.query('books', orderBy: 'created_at DESC, id DESC');
     return rows.map(Book.fromDatabaseMap).toList();
   }
 
   Future<Book?> getById(int id) async {
     final db = await _storage.connection;
-    final rows = await db.query('books', where: 'id = ?', whereArgs: [id], limit: 1);
+    final rows = await db.query(
+      'books',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
     return rows.isEmpty ? null : Book.fromDatabaseMap(rows.single);
   }
 
@@ -30,6 +39,7 @@ class BookRepository {
     return db.insert('books', book.toDatabaseMap());
   }
 
+  @override
   Future<bool> update(Book book) async {
     final id = book.id;
     if (id == null) {
@@ -40,7 +50,12 @@ class BookRepository {
       ..remove('id')
       ..remove('created_at')
       ..['updated_at'] = DateTime.now().toUtc().millisecondsSinceEpoch;
-    final changed = await db.update('books', values, where: 'id = ?', whereArgs: [id]);
+    final changed = await db.update(
+      'books',
+      values,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
     return changed == 1;
   }
 
