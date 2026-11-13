@@ -1,17 +1,25 @@
-# lt_tbdd
+# MyShelf
 
-A new Flutter project.
+Ứng dụng quản lý sách cá nhân bằng Flutter. Giao diện hiện có trang chủ; các màn
+hình thư viện, chi tiết, thêm/sửa sách, thống kê và cài đặt đang được phát triển.
 
-## Getting Started
+## Dữ liệu sách
 
-This project is a starting point for a Flutter application.
+- `lib/models/book.dart`: `Book`, bốn trạng thái đọc, dữ liệu bìa/ghi chú/yêu thích
+  và kiểm tra số trang. `totalPages` có thể bỏ trống; khi đó chưa thể cập nhật
+  `currentPage` khác 0.
+- `lib/data/book_database.dart`: SQLite `myshelf.db`, schema phiên bản 1. Database
+  mới bắt đầu trống, không tự chèn tám sách minh họa trong Figma.
+- `lib/data/book_repository.dart`: đọc danh sách, tìm theo ID, thêm, cập nhật và
+  xóa sách. Các màn hình sau sẽ gọi repository này thay cho dữ liệu viết cố định.
 
-A few resources to get you started if this is your first Flutter project:
+Dữ liệu được lưu cục bộ trên điện thoại (Android/iOS). Để cài dependency và chạy
+kiểm thử:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```bash
+flutter pub get
+flutter test
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+`flutter pub get` cũng cập nhật `pubspec.lock` sau khi thêm `sqflite` và `path`.
