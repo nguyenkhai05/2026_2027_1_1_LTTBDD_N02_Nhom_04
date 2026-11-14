@@ -33,6 +33,13 @@ class _MemoryBooks implements BookCatalog {
   }
 }
 
+class _FailingDeleteBooks extends _MemoryBooks {
+  _FailingDeleteBooks(super.books);
+
+  @override
+  Future<bool> delete(int id) async => false;
+}
+
 void main() {
   testWidgets('shows the empty library with no stored books', (tester) async {
     await tester.pumpWidget(
@@ -153,5 +160,24 @@ void main() {
 
     expect(find.byType(LibraryBookCard), findsOneWidget);
     expect(find.text('Nhà Giả Kim'), findsOneWidget);
+  });
+
+  testWidgets('failed deletion keeps the book and reports an error', (tester) async {
+    final repository = _FailingDeleteBooks([
+      Book(id: 1, title: 'Sách cần giữ', author: 'Tác giả'),
+    ]);
+    await tester.pumpWidget(MaterialApp(
+      home: LibraryScreen(repository: repository, onTabSelected: (_) {}),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Xóa sách'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Xóa'));
+    await tester.pumpAndSettle();
+
+    expect(repository.books, hasLength(1));
+    expect(find.text('Sách cần giữ'), findsOneWidget);
+    expect(find.text('Không thể xóa sách. Hãy thử lại.'), findsOneWidget);
   });
 }

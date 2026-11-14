@@ -180,8 +180,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
       ).showSnackBar(const SnackBar(content: Text('Đã xóa sách thành công.')));
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Xóa thành công.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Không thể xóa sách. Hãy thử lại.')),
+        );
       }
     } finally {
       if (mounted) {
