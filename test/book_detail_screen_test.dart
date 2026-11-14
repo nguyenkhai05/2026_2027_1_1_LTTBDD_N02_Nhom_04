@@ -65,4 +65,58 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Không tìm thấy sách'), findsOneWidget);
   });
+
+  testWidgets('favorite and progress changes are saved and shown', (tester) async {
+    final store = _MemoryBooks(Book(
+      id: 1, title: 'Nhà Giả Kim', author: 'Paulo Coelho',
+      status: BookStatus.reading, totalPages: 200, currentPage: 120,
+    ));
+    await tester.pumpWidget(MaterialApp(home: BookDetailScreen(bookId: 1, repository: store)));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Thêm vào yêu thích'));
+    await tester.pumpAndSettle();
+    expect(store.book!.isFavorite, isTrue);
+    expect(find.byTooltip('Bỏ khỏi yêu thích'), findsOneWidget);
+
+    await tester.tap(find.text('Cập nhật tiến độ'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, '160');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Lưu tiến độ'));
+    await tester.pumpAndSettle();
+    expect(store.book!.currentPage, 160);
+    expect(find.text('160 / 200 trang'), findsOneWidget);
+  });
+
+  testWidgets('deletion asks for confirmation then returns to caller', (tester) async {
+    final store = _MemoryBooks(Book(id: 1, title: 'Sách cần xóa', author: 'Tác giả'));
+    bool? deleted;
+    await tester.pumpWidget(MaterialApp(home: Builder(builder: (context) => Scaffold(
+      body: TextButton(
+        onPressed: () async {
+          deleted = await Navigator.of(context).push<bool>(
+            MaterialPageRoute(builder: (_) => BookDetailScreen(bookId: 1, repository: store)),
+          );
+        },
+        child: const Text('Mở sách'),
+      ),
+    ))));
+    await tester.tap(find.text('Mở sách'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Xóa sách'));
+    await tester.tap(find.text('Xóa sách'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Hủy'));
+    await tester.pumpAndSettle();
+    expect(store.book, isNotNull);
+
+    await tester.tap(find.text('Xóa sách'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Xóa'));
+    await tester.pumpAndSettle();
+    expect(store.book, isNull);
+    expect(deleted, isTrue);
+    expect(find.text('Mở sách'), findsOneWidget);
+  });
 }

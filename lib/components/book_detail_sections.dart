@@ -88,7 +88,14 @@ class BookDetailReading extends StatelessWidget {
         ),
         const SizedBox(height: 22),
         if (progress == null)
-          const Text('Chưa có thông tin tổng số trang', style: TextStyle(color: libraryMuted))
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Chưa có thông tin tổng số trang', style: TextStyle(color: libraryMuted)),
+              SizedBox(height: 8),
+              Text('Bổ sung tổng số trang trong Chỉnh sửa để cập nhật tiến độ.', style: TextStyle(color: libraryMuted)),
+            ],
+          )
         else
           Container(
             width: double.infinity,
@@ -118,11 +125,13 @@ class BookDetailReading extends StatelessWidget {
               ],
             ),
           ),
-        if (book.totalPages != null) ...[
+        if (book.genre != null || book.totalPages != null) ...[
           const SizedBox(height: 20),
           Row(children: [
-            Expanded(child: _Metadata(label: 'THỂ LOẠI', value: book.genre ?? 'Chưa phân loại')),
-            Expanded(child: _Metadata(label: 'TỔNG SỐ TRANG', value: '${book.totalPages} trang')),
+            if (book.genre != null)
+              Expanded(child: _Metadata(label: 'THỂ LOẠI', value: book.genre!)),
+            if (book.totalPages != null)
+              Expanded(child: _Metadata(label: 'TỔNG SỐ TRANG', value: '${book.totalPages} trang')),
           ]),
         ],
         if (book.description != null) ...[
