@@ -19,11 +19,13 @@ class LibraryScreen extends StatefulWidget {
     required this.repository,
     required this.onTabSelected,
     this.onAddBook,
+    this.onOpenBook,
   });
 
   final BookCatalog repository;
   final ValueChanged<int> onTabSelected;
   final Future<bool> Function()? onAddBook;
+  final Future<void> Function(Book)? onOpenBook;
 
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
@@ -204,6 +206,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
+  Future<void> _openBook(Book book) async {
+    final open = widget.onOpenBook;
+    if (open == null || _updating.contains(book.id)) return;
+    await open(book);
+    if (mounted) await _refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -327,6 +336,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               LibraryBookCard(
                 key: ValueKey(book.id),
                 book: book,
+                onTap: widget.onOpenBook == null ? null : () => _openBook(book),
                 onFavorite: _updating.contains(book.id)
                     ? null
                     : () => _toggleFavorite(book),

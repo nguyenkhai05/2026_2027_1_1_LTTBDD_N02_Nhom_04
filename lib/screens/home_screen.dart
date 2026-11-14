@@ -13,11 +13,13 @@ class HomeScreen extends StatefulWidget {
     required this.repository,
     required this.onTabSelected,
     this.onAddBook,
+    this.onOpenBook,
   });
 
   final BookCatalog repository;
   final ValueChanged<int> onTabSelected;
   final Future<bool> Function()? onAddBook;
+  final Future<void> Function(Book)? onOpenBook;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -55,6 +57,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (openForm == null) return;
     final added = await openForm();
     if (mounted && added) await _refresh();
+  }
+
+  Future<void> _openBook(Book book) async {
+    final open = widget.onOpenBook;
+    if (open == null) return;
+    await open(book);
+    if (mounted) await _refresh();
   }
 
   @override
@@ -110,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     emptyDescription:
                         'Hãy chọn một cuốn sách và bắt đầu hành trình đọc nhé!',
                     onViewAll: () => widget.onTabSelected(1),
+                    onBookTap: widget.onOpenBook == null ? null : _openBook,
                   ),
                   const SizedBox(height: 24),
                   HomeBookSection(
@@ -119,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     emptyDescription:
                         'Thêm sách đầu tiên để bắt đầu quản lý thư viện nhé!',
                     onViewAll: () => widget.onTabSelected(1),
+                    onBookTap: widget.onOpenBook == null ? null : _openBook,
                     onAddBook: widget.onAddBook == null ? null : _addBook,
                   ),
                 ],

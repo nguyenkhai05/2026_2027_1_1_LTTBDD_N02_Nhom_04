@@ -13,6 +13,7 @@ class HomeBookSection extends StatelessWidget {
     required this.emptyDescription,
     required this.onViewAll,
     this.onAddBook,
+    this.onBookTap,
   });
 
   final String title;
@@ -21,6 +22,7 @@ class HomeBookSection extends StatelessWidget {
   final String emptyDescription;
   final VoidCallback onViewAll;
   final VoidCallback? onAddBook;
+  final ValueChanged<Book>? onBookTap;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -43,7 +45,7 @@ class HomeBookSection extends StatelessWidget {
       const SizedBox(height: 12),
       if (books.isNotEmpty)
         for (final book in books) ...[
-          HomeBookCard(book: book, onTap: onViewAll),
+          HomeBookCard(book: book, onTap: onBookTap == null ? onViewAll : () => onBookTap!(book)),
           const SizedBox(height: 10),
         ]
       else

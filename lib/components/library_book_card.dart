@@ -11,24 +11,29 @@ class LibraryBookCard extends StatelessWidget {
     required this.onFavorite,
     required this.onDelete,
     required this.onUpdateProgress,
+    this.onTap,
   });
 
   final Book book;
   final VoidCallback? onFavorite;
   final VoidCallback? onDelete;
   final VoidCallback? onUpdateProgress;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final progress = book.progress;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(18),
-      ),
-      child: Row(
+        child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           BookCoverThumbnail(book: book, width: 78, height: 116),
@@ -116,6 +121,9 @@ class LibraryBookCard extends StatelessWidget {
             ),
           ),
         ],
+        ),
+        ),
+      ),
       ),
     );
   }

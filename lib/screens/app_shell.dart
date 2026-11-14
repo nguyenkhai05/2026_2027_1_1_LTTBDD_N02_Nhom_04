@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../data/book_database.dart';
 import '../data/book_repository.dart';
+import '../models/book.dart';
 import 'add_book_screen.dart';
+import 'book_detail_screen.dart';
 import 'home_screen.dart';
 import 'library_screen.dart';
 import 'settings_screen.dart';
@@ -45,6 +47,14 @@ class _AppShellState extends State<AppShell> {
     return added ?? false;
   }
 
+  Future<void> _openBookDetail(Book book) async {
+    final id = book.id;
+    if (id == null) return;
+    await Navigator.of(context).push<bool>(MaterialPageRoute(
+      builder: (_) => BookDetailScreen(bookId: id, repository: _books),
+    ));
+  }
+
   @override
   void dispose() {
     _database?.close();
@@ -58,6 +68,7 @@ class _AppShellState extends State<AppShell> {
         repository: _books,
         onTabSelected: _selectTab,
         onAddBook: _openAddBook,
+        onOpenBook: _openBookDetail,
       );
     }
 
@@ -83,6 +94,7 @@ class _AppShellState extends State<AppShell> {
       repository: _books,
       onTabSelected: _selectTab,
       onAddBook: _openAddBook,
+      onOpenBook: _openBookDetail,
     );
   }
 }

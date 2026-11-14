@@ -27,6 +27,14 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     _bookFuture = widget.repository.getById(widget.bookId);
   }
 
+  @override
+  void didUpdateWidget(covariant BookDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.bookId != widget.bookId || oldWidget.repository != widget.repository) {
+      _bookFuture = widget.repository.getById(widget.bookId);
+    }
+  }
+
   void _reload() => setState(() => _bookFuture = widget.repository.getById(widget.bookId));
 
   void _notify(String message) {

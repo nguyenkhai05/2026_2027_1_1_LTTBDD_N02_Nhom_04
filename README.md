@@ -1,7 +1,7 @@
 # MyShelf
 
 Ứng dụng quản lý sách cá nhân bằng Flutter. Đã có trang chủ, thư viện, thêm sách,
-cập nhật tiến độ, thống kê và cài đặt. Màn chi tiết sách, chỉnh sửa sách và đổi
+chi tiết sách, cập nhật tiến độ, thống kê và cài đặt. Chỉnh sửa sách và đổi
 ngôn ngữ cho toàn bộ ứng dụng là các phần tiếp theo.
 
 ## Dữ liệu sách
@@ -15,6 +15,9 @@ ngôn ngữ cho toàn bộ ứng dụng là các phần tiếp theo.
   xóa sách. Trang chủ, thư viện và thống kê đọc dữ liệu từ repository này.
 - `lib/models/reading_statistics.dart`: tính số sách theo trạng thái và tỷ lệ
   tương ứng từ danh sách đang lưu.
+- `lib/screens/book_detail_screen.dart`: mở từ thẻ sách ở trang chủ hoặc thư viện,
+  tải dữ liệu theo ID, xem mô tả và ghi chú, đổi yêu thích, cập nhật tiến độ và
+  xóa sách có xác nhận. Sau khi quay lại, danh sách được tải lại.
 
 Dữ liệu được lưu cục bộ trên điện thoại (Android/iOS). Để cài dependency và chạy
 kiểm thử:
