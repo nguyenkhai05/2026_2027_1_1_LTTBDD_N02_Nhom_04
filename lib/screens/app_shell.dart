@@ -5,6 +5,7 @@ import '../data/book_repository.dart';
 import 'add_book_screen.dart';
 import 'home_screen.dart';
 import 'library_screen.dart';
+import 'settings_screen.dart';
 
 /// Shares one local repository between the available tabs.
 class AppShell extends StatefulWidget {
@@ -18,15 +19,16 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  late final BookDatabase? _database =
-      widget.repository == null ? BookDatabase() : null;
-  late final BookStore _books =
-      widget.repository ?? BookRepository(_database!);
+  late final BookDatabase? _database = widget.repository == null
+      ? BookDatabase()
+      : null;
+  late final BookStore _books = widget.repository ?? BookRepository(_database!);
   int _tab = 0;
+  String _language = 'Tiếng Việt';
 
   void _selectTab(int index) {
-    // Statistics and Settings get their own screens in later issues.
-    if (index > 1 || index == _tab) return;
+    // Statistics is not implemented yet; keep its tab inactive for now.
+    if ((index != 0 && index != 1 && index != 3) || index == _tab) return;
     setState(() => _tab = index);
   }
 
@@ -50,11 +52,25 @@ class _AppShellState extends State<AppShell> {
   }
 
   @override
-  Widget build(BuildContext context) => _tab == 1
-      ? LibraryScreen(
-          repository: _books,
-          onTabSelected: _selectTab,
-          onAddBook: _openAddBook,
-        )
-      : HomeScreen(onTabSelected: _selectTab);
+  Widget build(BuildContext context) {
+    if (_tab == 1) {
+      return LibraryScreen(
+        repository: _books,
+        onTabSelected: _selectTab,
+        onAddBook: _openAddBook,
+      );
+    }
+
+    if (_tab == 3) {
+      return SettingsScreen(
+        onTabSelected: _selectTab,
+        language: _language,
+        onLanguageChanged: (language) {
+          setState(() => _language = language);
+        },
+      );
+    }
+
+    return HomeScreen(onTabSelected: _selectTab);
+  }
 }
