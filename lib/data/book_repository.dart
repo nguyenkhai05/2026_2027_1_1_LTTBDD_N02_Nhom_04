@@ -4,6 +4,7 @@ import 'book_database.dart';
 /// Operations the library screen needs from local storage.
 abstract interface class BookCatalog {
   Future<List<Book>> getAll();
+  Future<Book?> getById(int id);
   Future<bool> update(Book book);
   Future<bool> delete(int id);
 }
@@ -26,6 +27,7 @@ class BookRepository implements BookStore {
     return rows.map(Book.fromDatabaseMap).toList();
   }
 
+  @override
   Future<Book?> getById(int id) async {
     final db = await _storage.connection;
     final rows = await db.query(

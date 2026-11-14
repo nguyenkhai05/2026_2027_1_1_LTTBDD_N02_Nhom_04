@@ -12,6 +12,14 @@ class _MemoryStore implements BookStore {
   Future<List<Book>> getAll() async => List.of(books);
 
   @override
+  Future<Book?> getById(int id) async {
+    for (final book in books) {
+      if (book.id == id) return book;
+    }
+    return null;
+  }
+
+  @override
   Future<int> insert(Book book) async {
     final id = ++_nextId;
     books.add(Book.fromDatabaseMap({...book.toDatabaseMap(), 'id': id}));

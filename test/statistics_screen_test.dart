@@ -13,6 +13,14 @@ class _MemoryBooks implements BookCatalog {
   Future<List<Book>> getAll() async => List.of(books);
 
   @override
+  Future<Book?> getById(int id) async {
+    for (final book in books) {
+      if (book.id == id) return book;
+    }
+    return null;
+  }
+
+  @override
   Future<bool> update(Book book) async {
     final index = books.indexWhere((item) => item.id == book.id);
     if (index < 0) return false;
