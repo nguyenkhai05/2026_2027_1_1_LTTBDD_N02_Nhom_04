@@ -25,10 +25,22 @@ class _MemoryStore implements BookStore {
     books[index] = book;
     return true;
   }
+
+  @override
+  Future<bool> delete(int id) async {
+    final index = books.indexWhere((book) => book.id == id);
+
+    if (index < 0) return false;
+
+    books.removeAt(index);
+    return true;
+  }
 }
 
 void main() {
-  testWidgets('Library opens Add Book, saves and reloads its list', (tester) async {
+  testWidgets('Library opens Add Book, saves and reloads its list', (
+    tester,
+  ) async {
     final store = _MemoryStore();
     await tester.pumpWidget(MaterialApp(home: AppShell(repository: store)));
 

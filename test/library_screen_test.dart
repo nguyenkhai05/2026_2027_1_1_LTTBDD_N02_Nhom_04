@@ -21,6 +21,16 @@ class _MemoryBooks implements BookCatalog {
     books[index] = book;
     return true;
   }
+
+  @override
+  Future<bool> delete(int id) async {
+    final index = books.indexWhere((book) => book.id == id);
+
+    if (index < 0) return false;
+
+    books.removeAt(index);
+    return true;
+  }
 }
 
 void main() {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../components/home_bottom_navigation.dart';
 import '../components/library_book_card.dart';
 import '../components/library_empty_state.dart';
+import '../components/library_delete_dialog.dart';
 import '../components/library_filter_sheet.dart';
 import '../components/library_search_field.dart';
 import '../components/library_status_filters.dart';
@@ -93,6 +94,47 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
+  Future<void> _deleteBook(Book book) async {
+    final id = book.id;
+    if (id == null || _updating.contains(id)) return;
+
+    final confirmed = await showLibraryDeleteDialog(
+      context,
+      bookTitle: book.title,
+    );
+
+    if (!confirmed || !mounted) return;
+
+    setState(() => _updating.add(id));
+
+    try {
+      final deleted = await widget.repository.delete(id);
+
+      if (!deleted) {
+        throw StateError('The book no longer exists');
+      }
+
+      if (!mounted) return;
+
+      await _refresh();
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Đã xóa sách thành công.')));
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Xóa thành công.')));
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _updating.remove(id));
+      }
+    }
+  }
+
   Future<void> _handleAddBook() async {
     final openForm = widget.onAddBook;
     if (openForm == null) return;
@@ -100,9 +142,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
     if (!mounted || !added) return;
     await _refresh();
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Đã thêm sách thành công.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Đã thêm sách thành công.')));
     }
   }
 
@@ -232,6 +274,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 onFavorite: _updating.contains(book.id)
                     ? null
                     : () => _toggleFavorite(book),
+                onDelete: _updating.contains(book.id)
+                    ? null
+                    : () => _deleteBook(book),
               ),
         ],
       ),

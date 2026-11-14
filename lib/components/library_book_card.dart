@@ -11,10 +11,12 @@ class LibraryBookCard extends StatelessWidget {
     super.key,
     required this.book,
     required this.onFavorite,
+    required this.onDelete,
   });
 
   final Book book;
   final VoidCallback? onFavorite;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class LibraryBookCard extends StatelessWidget {
                   children: [
                     _statusBadge(),
                     const Spacer(),
+
                     IconButton(
                       onPressed: onFavorite,
                       tooltip: book.isFavorite
@@ -68,6 +71,16 @@ class LibraryBookCard extends StatelessWidget {
                             ? Icons.favorite
                             : Icons.favorite_border,
                         color: libraryGreen,
+                      ),
+                    ),
+
+                    IconButton(
+                      onPressed: onDelete,
+                      tooltip: 'Xóa sách',
+                      visualDensity: VisualDensity.compact,
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        color: Color(0xFFB74742),
                       ),
                     ),
                   ],

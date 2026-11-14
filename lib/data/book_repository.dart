@@ -5,6 +5,7 @@ import 'book_database.dart';
 abstract interface class BookCatalog {
   Future<List<Book>> getAll();
   Future<bool> update(Book book);
+  Future<bool> delete(int id);
 }
 
 /// Adds creation to the read/update operations used by the app shell.
@@ -65,6 +66,7 @@ class BookRepository implements BookStore {
     return changed == 1;
   }
 
+  @override
   Future<bool> delete(int id) async {
     final db = await _storage.connection;
     final changed = await db.delete('books', where: 'id = ?', whereArgs: [id]);
