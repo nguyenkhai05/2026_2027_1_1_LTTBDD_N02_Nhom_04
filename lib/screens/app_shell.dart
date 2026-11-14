@@ -6,6 +6,7 @@ import 'add_book_screen.dart';
 import 'home_screen.dart';
 import 'library_screen.dart';
 import 'settings_screen.dart';
+import 'statistics_screen.dart';
 
 /// Shares one local repository between the available tabs.
 class AppShell extends StatefulWidget {
@@ -27,8 +28,7 @@ class _AppShellState extends State<AppShell> {
   String _language = 'Tiếng Việt';
 
   void _selectTab(int index) {
-    // Statistics is not implemented yet; keep its tab inactive for now.
-    if ((index != 0 && index != 1 && index != 3) || index == _tab) return;
+    if (index < 0 || index > 3 || index == _tab) return;
     setState(() => _tab = index);
   }
 
@@ -55,6 +55,14 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     if (_tab == 1) {
       return LibraryScreen(
+        repository: _books,
+        onTabSelected: _selectTab,
+        onAddBook: _openAddBook,
+      );
+    }
+
+    if (_tab == 2) {
+      return StatisticsScreen(
         repository: _books,
         onTabSelected: _selectTab,
         onAddBook: _openAddBook,
