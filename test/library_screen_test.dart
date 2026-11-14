@@ -90,6 +90,42 @@ void main() {
     expect(find.text('Clean Code'), findsOneWidget);
   });
 
+  testWidgets('updates reading progress and refreshes the library card', (
+    tester,
+  ) async {
+    final repository = _MemoryBooks([
+      Book(
+        id: 1,
+        title: 'Nhà Giả Kim',
+        author: 'Paulo Coelho',
+        status: BookStatus.reading,
+        totalPages: 200,
+        currentPage: 120,
+      ),
+    ]);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LibraryScreen(repository: repository, onTabSelected: (_) {}),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Cập nhật tiến độ'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Cập nhật tiến độ'), findsOneWidget);
+    await tester.enterText(find.byType(TextField).last, '160');
+    await tester.pumpAndSettle();
+    expect(find.text('80% hoàn thành'), findsOneWidget);
+
+    await tester.tap(find.text('Lưu tiến độ'));
+    await tester.pumpAndSettle();
+
+    expect(repository.books.single.currentPage, 160);
+    expect(find.text('160 / 200 · 80%'), findsOneWidget);
+  });
+
   testWidgets('filter sheet applies favorite selection', (tester) async {
     final repository = _MemoryBooks([
       Book(

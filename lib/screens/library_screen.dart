@@ -7,6 +7,7 @@ import '../components/library_delete_dialog.dart';
 import '../components/library_filter_sheet.dart';
 import '../components/library_search_field.dart';
 import '../components/library_status_filters.dart';
+import '../components/update_progress_sheet.dart';
 import '../data/book_repository.dart';
 import '../models/book.dart';
 import '../models/library_query.dart';
@@ -86,6 +87,60 @@ class _LibraryScreenState extends State<LibraryScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Không thể cập nhật yêu thích. Thử lại nhé.'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _updating.remove(id));
+    }
+  }
+
+  Future<void> _updateProgress(Book book) async {
+    final id = book.id;
+    if (id == null || _updating.contains(id)) return;
+
+    final currentPage = await showUpdateProgressSheet(
+      context,
+      book: book,
+      onEditBook: () {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Màn hình chỉnh sửa sách chưa được triển khai. Hãy bổ sung tổng số trang trước.',
+            ),
+          ),
+        );
+      },
+    );
+
+    if (!mounted || currentPage == null || currentPage == book.currentPage) {
+      return;
+    }
+
+    setState(() => _updating.add(id));
+    try {
+      final updated = await widget.repository.update(
+        book.copyWith(currentPage: currentPage),
+      );
+      if (!updated) throw StateError('The book no longer exists');
+      if (!mounted) return;
+      await _refresh();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            currentPage == book.totalPages
+                ? 'Bạn đã đọc hết sách. Có thể chuyển trạng thái sang Đã đọc.'
+                : 'Đã cập nhật tiến độ đọc.',
+          ),
+        ),
+      );
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Không thể cập nhật tiến độ. Thử lại nhé.'),
           ),
         );
       }
@@ -277,6 +332,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 onDelete: _updating.contains(book.id)
                     ? null
                     : () => _deleteBook(book),
+                onUpdateProgress: _updating.contains(book.id)
+                    ? null
+                    : () => _updateProgress(book),
               ),
         ],
       ),

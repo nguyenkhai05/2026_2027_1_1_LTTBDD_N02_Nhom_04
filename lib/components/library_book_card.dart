@@ -12,11 +12,13 @@ class LibraryBookCard extends StatelessWidget {
     required this.book,
     required this.onFavorite,
     required this.onDelete,
+    required this.onUpdateProgress,
   });
 
   final Book book;
   final VoidCallback? onFavorite;
   final VoidCallback? onDelete;
+  final VoidCallback? onUpdateProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,16 @@ class LibraryBookCard extends StatelessWidget {
                         book.isFavorite
                             ? Icons.favorite
                             : Icons.favorite_border,
+                        color: libraryGreen,
+                      ),
+                    ),
+
+                    IconButton(
+                      onPressed: onUpdateProgress,
+                      tooltip: 'Cập nhật tiến độ',
+                      visualDensity: VisualDensity.compact,
+                      icon: const Icon(
+                        Icons.edit_note_outlined,
                         color: libraryGreen,
                       ),
                     ),
