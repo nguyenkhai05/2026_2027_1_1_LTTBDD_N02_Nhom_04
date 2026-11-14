@@ -78,6 +78,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(store.book!.isFavorite, isTrue);
     expect(find.byTooltip('Bỏ khỏi yêu thích'), findsOneWidget);
+    expect(find.text('Không thể cập nhật yêu thích. Thử lại nhé.'), findsNothing);
 
     await tester.tap(find.text('Cập nhật tiến độ'));
     await tester.pumpAndSettle();

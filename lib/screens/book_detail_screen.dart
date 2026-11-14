@@ -35,7 +35,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     }
   }
 
-  void _reload() => setState(() => _bookFuture = widget.repository.getById(widget.bookId));
+  void _reload() {
+    setState(() {
+      _bookFuture = widget.repository.getById(widget.bookId);
+    });
+  }
 
   void _notify(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));

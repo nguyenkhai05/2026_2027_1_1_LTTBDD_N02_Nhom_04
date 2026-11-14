@@ -44,7 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _refresh() async {
     final future = widget.repository.getAll();
-    setState(() => _booksFuture = future);
+    setState(() {
+      _booksFuture = future;
+    });
     try {
       await future;
     } catch (_) {
