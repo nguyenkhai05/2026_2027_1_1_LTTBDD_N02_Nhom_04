@@ -1,93 +1,85 @@
 import 'package:flutter/material.dart';
 
+import '../models/book.dart';
+import '../theme/library_colors.dart';
 import 'home_book_card.dart';
 
 class HomeBookSection extends StatelessWidget {
-  final String title;
-  final bool hasBooks;
-  final String emptyTitle;
-  final String emptyDescription;
-
   const HomeBookSection({
     super.key,
     required this.title,
-    required this.hasBooks,
+    required this.books,
     required this.emptyTitle,
     required this.emptyDescription,
+    required this.onViewAll,
+    this.onAddBook,
   });
 
+  final String title;
+  final List<Book> books;
+  final String emptyTitle;
+  final String emptyDescription;
+  final VoidCallback onViewAll;
+  final VoidCallback? onAddBook;
+
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Tiêu đề khu vực
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF252A24),
-              ),
-            ),
-
-            const Text(
-              'Xem tất cả',
-              style: TextStyle(fontSize: 10, color: Color(0xFF526B50)),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 12),
-
-        // Kiểm tra có sách hay không
-        if (hasBooks)
-          const HomeBookCard()
-        else
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              children: [
-                const Icon(
-                  Icons.menu_book_outlined,
-                  size: 30,
-                  color: Color(0xFF526B50),
-                ),
-
-                const SizedBox(height: 8),
-
-                Text(
-                  emptyTitle,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF252A24),
-                  ),
-                ),
-
-                const SizedBox(height: 5),
-
-                Text(
-                  emptyDescription,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF777D73),
-                  ),
-                ),
-              ],
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: libraryInk,
             ),
           ),
-      ],
-    );
-  }
+          TextButton(onPressed: onViewAll, child: const Text('Xem tất cả')),
+        ],
+      ),
+      const SizedBox(height: 12),
+      if (books.isNotEmpty)
+        for (final book in books) ...[
+          HomeBookCard(book: book, onTap: onViewAll),
+          const SizedBox(height: 10),
+        ]
+      else
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            children: [
+              const Icon(Icons.menu_book_outlined, size: 30, color: libraryGreen),
+              const SizedBox(height: 8),
+              Text(
+                emptyTitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: libraryInk,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                emptyDescription,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 11, color: libraryMuted),
+              ),
+              if (onAddBook != null) ...[
+                const SizedBox(height: 12),
+                FilledButton(onPressed: onAddBook, child: const Text('Thêm sách đầu tiên')),
+              ],
+            ],
+          ),
+        ),
+    ],
+  );
 }

@@ -1,10 +1,8 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/book.dart';
 import '../theme/library_colors.dart';
+import 'book_cover_thumbnail.dart';
 
 class LibraryBookCard extends StatelessWidget {
   const LibraryBookCard({
@@ -33,7 +31,7 @@ class LibraryBookCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _cover(),
+          BookCoverThumbnail(book: book, width: 78, height: 116),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -118,47 +116,6 @@ class LibraryBookCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _cover() {
-    final coverPath = book.coverPath;
-    final fallback = Container(
-      width: 78,
-      height: 116,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: switch (book.status) {
-          BookStatus.reading => const Color(0xFFC69B52),
-          BookStatus.completed => const Color(0xFF985340),
-          BookStatus.wantToRead => const Color(0xFF34505A),
-          BookStatus.paused => const Color(0xFF717364),
-        },
-        borderRadius: BorderRadius.circular(4),
-      ),
-      alignment: Alignment.topLeft,
-      child: Text(
-        book.title.toUpperCase(),
-        maxLines: 4,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontSize: 10,
-          height: 1.2,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-    );
-    if (coverPath == null || kIsWeb) return fallback;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Image.file(
-        File(coverPath),
-        width: 78,
-        height: 116,
-        fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => fallback,
       ),
     );
   }

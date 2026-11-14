@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
 class OverviewCard extends StatelessWidget {
-  const OverviewCard({super.key});
+  const OverviewCard({
+    super.key,
+    required this.total,
+    required this.reading,
+    required this.completed,
+  });
+
+  final int total;
+  final int reading;
+  final int completed;
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +23,10 @@ class OverviewCard extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          _OverviewItem(number: '8', label: 'Tổng số sách'),
-          _OverviewItem(number: '3', label: 'Đang đọc'),
-          _OverviewItem(number: '2', label: 'Đã đọc'),
+        children: [
+          _OverviewItem(number: '$total', label: 'Tổng số sách'),
+          _OverviewItem(number: '$reading', label: 'Đang đọc'),
+          _OverviewItem(number: '$completed', label: 'Đã đọc'),
         ],
       ),
     );

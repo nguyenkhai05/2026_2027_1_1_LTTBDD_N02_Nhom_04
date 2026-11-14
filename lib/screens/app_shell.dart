@@ -79,6 +79,10 @@ class _AppShellState extends State<AppShell> {
       );
     }
 
-    return HomeScreen(onTabSelected: _selectTab);
+    return HomeScreen(
+      repository: _books,
+      onTabSelected: _selectTab,
+      onAddBook: _openAddBook,
+    );
   }
 }
