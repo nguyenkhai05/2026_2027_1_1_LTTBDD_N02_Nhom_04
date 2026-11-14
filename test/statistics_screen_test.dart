@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lt_tbdd/components/statistics_components.dart';
 import 'package:lt_tbdd/data/book_repository.dart';
 import 'package:lt_tbdd/models/book.dart';
 import 'package:lt_tbdd/screens/statistics_screen.dart';
@@ -96,6 +97,43 @@ void main() {
     expect(find.text('Đã đọc'), findsOneWidget);
     expect(find.text('Muốn đọc'), findsOneWidget);
     expect(find.text('Tạm dừng'), findsOneWidget);
+    final cards = tester.widgetList<StatisticsSummaryCard>(
+      find.byType(StatisticsSummaryCard),
+    );
+    expect(
+      {for (final card in cards) card.label: card.value},
+      {
+        'Tổng số sách': 5,
+        'Đang đọc': 2,
+        'Đã đọc': 1,
+        'Muốn đọc': 1,
+        'Tạm dừng': 1,
+      },
+    );
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('adding a book from the empty state reloads the counts', (tester) async {
+    final repository = _MemoryBooks([]);
+    await tester.pumpWidget(MaterialApp(
+      home: StatisticsScreen(
+        repository: repository,
+        onTabSelected: (_) {},
+        onAddBook: () async {
+          repository.books.add(Book(id: 1, title: 'Sách mới', author: 'Tác giả'));
+          return true;
+        },
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Thêm sách'));
+    await tester.pumpAndSettle();
+    expect(find.byType(StatisticsSummaryCard), findsNWidgets(5));
+    expect(
+      tester.widgetList<StatisticsSummaryCard>(find.byType(StatisticsSummaryCard))
+          .first.value,
+      1,
+    );
   });
 }

@@ -4,6 +4,7 @@ import '../components/home_bottom_navigation.dart';
 import '../components/statistics_components.dart';
 import '../data/book_repository.dart';
 import '../models/book.dart';
+import '../models/reading_statistics.dart';
 import '../theme/library_colors.dart';
 
 class StatisticsScreen extends StatefulWidget {
@@ -29,6 +30,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   void initState() {
     super.initState();
     _booksFuture = widget.repository.getAll();
+  }
+
+  @override
+  void didUpdateWidget(covariant StatisticsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.repository != widget.repository) {
+      _booksFuture = widget.repository.getAll();
+    }
   }
 
   Future<void> _refresh() async {
@@ -84,6 +93,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               );
             }
 
+            final statistics = ReadingStatistics(books);
+
             return RefreshIndicator(
               onRefresh: _refresh,
               color: libraryGreen,
@@ -107,14 +118,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   const SizedBox(height: 20),
                   StatisticsSummaryCard(
                     label: 'Tổng số sách',
-                    value: books.length,
+                    value: statistics.total,
                     icon: Icons.menu_book_outlined,
                     wide: true,
                   ),
                   const SizedBox(height: 12),
-                  _statusCards(books),
+                  _statusCards(statistics),
                   const SizedBox(height: 12),
-                  ReadingStatusChart(books: books),
+                  ReadingStatusChart(statistics: statistics),
                 ],
               ),
             );
@@ -124,10 +135,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     );
   }
 
-  Widget _statusCards(List<Book> books) {
-    int count(BookStatus status) =>
-        books.where((book) => book.status == status).length;
-
+  Widget _statusCards(ReadingStatistics statistics) {
     return GridView.count(
       crossAxisCount: 2,
       crossAxisSpacing: 12,
@@ -138,22 +146,22 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       children: [
         StatisticsSummaryCard(
           label: 'Đang đọc',
-          value: count(BookStatus.reading),
+          value: statistics.count(BookStatus.reading),
           icon: Icons.menu_book_outlined,
         ),
         StatisticsSummaryCard(
           label: 'Đã đọc',
-          value: count(BookStatus.completed),
+          value: statistics.count(BookStatus.completed),
           icon: Icons.check,
         ),
         StatisticsSummaryCard(
           label: 'Muốn đọc',
-          value: count(BookStatus.wantToRead),
+          value: statistics.count(BookStatus.wantToRead),
           icon: Icons.menu_book_outlined,
         ),
         StatisticsSummaryCard(
           label: 'Tạm dừng',
-          value: count(BookStatus.paused),
+          value: statistics.count(BookStatus.paused),
           icon: Icons.menu_book_outlined,
         ),
       ],

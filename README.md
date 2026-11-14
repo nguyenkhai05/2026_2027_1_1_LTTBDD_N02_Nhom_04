@@ -1,7 +1,8 @@
 # MyShelf
 
-Ứng dụng quản lý sách cá nhân bằng Flutter. Giao diện hiện có trang chủ; các màn
-hình thư viện, chi tiết, thêm/sửa sách, thống kê và cài đặt đang được phát triển.
+Ứng dụng quản lý sách cá nhân bằng Flutter. Đã có trang chủ, thư viện, thêm sách,
+cập nhật tiến độ, thống kê và cài đặt. Màn chi tiết sách, chỉnh sửa sách và đổi
+ngôn ngữ cho toàn bộ ứng dụng là các phần tiếp theo.
 
 ## Dữ liệu sách
 
@@ -11,13 +12,16 @@ hình thư viện, chi tiết, thêm/sửa sách, thống kê và cài đặt đ
 - `lib/data/book_database.dart`: SQLite `myshelf.db`, schema phiên bản 1. Database
   mới bắt đầu trống, không tự chèn tám sách minh họa trong Figma.
 - `lib/data/book_repository.dart`: đọc danh sách, tìm theo ID, thêm, cập nhật và
-  xóa sách. Các màn hình sau sẽ gọi repository này thay cho dữ liệu viết cố định.
+  xóa sách. Trang chủ, thư viện và thống kê đọc dữ liệu từ repository này.
+- `lib/models/reading_statistics.dart`: tính số sách theo trạng thái và tỷ lệ
+  tương ứng từ danh sách đang lưu.
 
 Dữ liệu được lưu cục bộ trên điện thoại (Android/iOS). Để cài dependency và chạy
 kiểm thử:
 
 ```bash
 flutter pub get
+flutter analyze --no-fatal-infos
 flutter test
 flutter run
 ```

@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/book.dart';
+import '../models/reading_statistics.dart';
 import '../theme/library_colors.dart';
 
 class StatisticsSummaryCard extends StatelessWidget {
@@ -56,9 +58,9 @@ class StatisticsSummaryCard extends StatelessWidget {
 }
 
 class ReadingStatusChart extends StatelessWidget {
-  const ReadingStatusChart({super.key, required this.books});
+  const ReadingStatusChart({super.key, required this.statistics});
 
-  final List<Book> books;
+  final ReadingStatistics statistics;
 
   static const _statuses = [
     _StatusStyle(BookStatus.wantToRead, 'Muốn đọc', Color(0xFFC7D2BD)),
@@ -69,11 +71,6 @@ class ReadingStatusChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counts = {
-      for (final status in BookStatus.values)
-        status: books.where((book) => book.status == status).length,
-    };
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -103,7 +100,7 @@ class ReadingStatusChart extends StatelessWidget {
                   child: CustomPaint(
                     painter: _ReadingStatusPainter(
                       values: _statuses
-                          .map((item) => counts[item.status]!)
+                          .map((item) => statistics.count(item.status))
                           .toList(),
                       colors: _statuses.map((item) => item.color).toList(),
                     ),
@@ -111,7 +108,7 @@ class ReadingStatusChart extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 44),
                         child: Text(
-                          '${books.length}',
+                          '${statistics.total}',
                           style: const TextStyle(
                             color: libraryInk,
                             fontSize: 19,
@@ -132,8 +129,8 @@ class ReadingStatusChart extends StatelessWidget {
                     for (final item in _statuses)
                       _LegendItem(
                         label: item.label,
-                        count: counts[item.status]!,
-                        total: books.length,
+                        count: statistics.count(item.status),
+                        percentage: statistics.percentage(item.status),
                         color: item.color,
                       ),
                   ],
@@ -151,18 +148,17 @@ class _LegendItem extends StatelessWidget {
   const _LegendItem({
     required this.label,
     required this.count,
-    required this.total,
+    required this.percentage,
     required this.color,
   });
 
   final String label;
   final int count;
-  final int total;
+  final String percentage;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
-    final percentage = total == 0 ? 0 : (count / total * 100).round();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -180,7 +176,7 @@ class _LegendItem extends StatelessWidget {
             ),
           ),
           Text(
-            '$count · $percentage%',
+            '$count · $percentage',
             style: const TextStyle(color: libraryMuted, fontSize: 10),
           ),
         ],
@@ -236,5 +232,6 @@ class _ReadingStatusPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ReadingStatusPainter oldDelegate) =>
-      oldDelegate.values != values || oldDelegate.colors != colors;
+      !listEquals(oldDelegate.values, values) ||
+      !listEquals(oldDelegate.colors, colors);
 }
