@@ -6,6 +6,7 @@ import '../components/update_progress_sheet.dart';
 import '../data/book_repository.dart';
 import '../models/book.dart';
 import '../theme/library_colors.dart';
+import 'edit_book_screen.dart';
 
 class BookDetailScreen extends StatefulWidget {
   const BookDetailScreen({super.key, required this.bookId, required this.repository});
@@ -45,6 +46,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
+  Future<void> _editBook(Book book) async {
+    final saved = await Navigator.of(context).push<bool>(MaterialPageRoute(
+      builder: (_) => EditBookScreen(
+        book: book,
+        onSave: widget.repository.update,
+      ),
+    ));
+    if (mounted && saved == true) _reload();
+  }
+
   Future<void> _toggleFavorite(Book book) async {
     if (_saving) return;
     setState(() => _saving = true);
@@ -62,7 +73,19 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
   Future<void> _updateProgress(Book book) async {
     if (_saving) return;
-    final page = await showUpdateProgressSheet(context, book: book);
+    var editRequested = false;
+    final page = await showUpdateProgressSheet(
+      context,
+      book: book,
+      onEditBook: () {
+        editRequested = true;
+        Navigator.of(context).pop();
+      },
+    );
+    if (mounted && editRequested) {
+      await _editBook(book);
+      return;
+    }
     if (!mounted || page == null || page == book.currentPage) return;
     setState(() => _saving = true);
     try {
@@ -129,6 +152,15 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       const SizedBox(height: 28),
                       BookDetailReading(book: book),
                       const SizedBox(height: 30),
+                      FilledButton(
+                        onPressed: _saving ? null : () => _editBook(book),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFFE8EFE6),
+                          foregroundColor: libraryGreen,
+                        ),
+                        child: const Text('Chỉnh sửa'),
+                      ),
+                      const SizedBox(height: 12),
                       OutlinedButton.icon(
                         onPressed: _saving ? null : () => _deleteBook(book),
                         icon: const Icon(Icons.delete_outline),

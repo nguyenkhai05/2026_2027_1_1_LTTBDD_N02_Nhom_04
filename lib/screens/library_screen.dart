@@ -12,6 +12,7 @@ import '../data/book_repository.dart';
 import '../models/book.dart';
 import '../models/library_query.dart';
 import '../theme/library_colors.dart';
+import 'edit_book_screen.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({
@@ -103,20 +104,20 @@ class _LibraryScreenState extends State<LibraryScreen> {
     final id = book.id;
     if (id == null || _updating.contains(id)) return;
 
+    var editRequested = false;
     final currentPage = await showUpdateProgressSheet(
       context,
       book: book,
       onEditBook: () {
+        editRequested = true;
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Màn hình chỉnh sửa sách chưa được triển khai. Hãy bổ sung tổng số trang trước.',
-            ),
-          ),
-        );
       },
     );
+
+    if (mounted && editRequested) {
+      await _editBook(book);
+      return;
+    }
 
     if (!mounted || currentPage == null || currentPage == book.currentPage) {
       return;
@@ -151,6 +152,16 @@ class _LibraryScreenState extends State<LibraryScreen> {
     } finally {
       if (mounted) setState(() => _updating.remove(id));
     }
+  }
+
+  Future<void> _editBook(Book book) async {
+    final saved = await Navigator.of(context).push<bool>(MaterialPageRoute(
+      builder: (_) => EditBookScreen(
+        book: book,
+        onSave: widget.repository.update,
+      ),
+    ));
+    if (mounted && saved == true) await _refresh();
   }
 
   Future<void> _deleteBook(Book book) async {

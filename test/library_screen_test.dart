@@ -5,6 +5,7 @@ import 'package:lt_tbdd/components/library_filter_sheet.dart';
 import 'package:lt_tbdd/data/book_repository.dart';
 import 'package:lt_tbdd/models/book.dart';
 import 'package:lt_tbdd/screens/library_screen.dart';
+import 'package:lt_tbdd/screens/edit_book_screen.dart';
 
 class _MemoryBooks implements BookCatalog {
   _MemoryBooks(this.books);
@@ -187,5 +188,29 @@ void main() {
     expect(repository.books, hasLength(1));
     expect(find.text('Sách cần giữ'), findsOneWidget);
     expect(find.text('Không thể xóa sách. Hãy thử lại.'), findsOneWidget);
+  });
+
+  testWidgets('unknown page count can be filled from progress sheet', (tester) async {
+    final repository = _MemoryBooks([
+      Book(id: 1, title: 'Atomic Habits', author: 'James Clear'),
+    ]);
+    await tester.pumpWidget(MaterialApp(home: LibraryScreen(
+      repository: repository, onTabSelected: (_) {},
+    )));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Cập nhật tiến độ'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Chỉnh sửa sách'));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditBookScreen), findsOneWidget);
+
+    await tester.ensureVisible(find.byType(TextFormField).at(2));
+    await tester.enterText(find.byType(TextFormField).at(2), '120');
+    await tester.tap(find.text('Lưu thay đổi'));
+    await tester.pumpAndSettle();
+
+    expect(repository.books.single.totalPages, 120);
+    expect(find.text('0 / 120 · 0%'), findsOneWidget);
   });
 }

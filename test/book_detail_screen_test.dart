@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lt_tbdd/data/book_repository.dart';
 import 'package:lt_tbdd/models/book.dart';
 import 'package:lt_tbdd/screens/book_detail_screen.dart';
+import 'package:lt_tbdd/screens/edit_book_screen.dart';
 
 class _MemoryBooks implements BookCatalog {
   _MemoryBooks(this.book);
@@ -119,5 +120,49 @@ void main() {
     expect(store.book, isNull);
     expect(deleted, isTrue);
     expect(find.text('Mở sách'), findsOneWidget);
+  });
+
+  testWidgets('editing from detail reloads saved fields', (tester) async {
+    final store = _MemoryBooks(Book(
+      id: 1, title: 'Sách cũ', author: 'Tác giả',
+      totalPages: 200, currentPage: 120,
+    ));
+    await tester.pumpWidget(MaterialApp(home: BookDetailScreen(bookId: 1, repository: store)));
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.text('Chỉnh sửa'));
+    await tester.tap(find.text('Chỉnh sửa'));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditBookScreen), findsOneWidget);
+    await tester.enterText(find.byType(TextFormField).first, 'Sách mới');
+    await tester.ensureVisible(find.byType(TextFormField).at(3));
+    await tester.enterText(find.byType(TextFormField).at(3), '150');
+    await tester.tap(find.text('Lưu thay đổi'));
+    await tester.pumpAndSettle();
+
+    expect(store.book!.title, 'Sách mới');
+    expect(store.book!.currentPage, 150);
+    expect(find.byType(BookDetailScreen), findsOneWidget);
+    expect(find.text('Sách mới'), findsOneWidget);
+    expect(find.text('150 / 200 trang'), findsOneWidget);
+  });
+
+  testWidgets('missing page count opens edit from progress sheet', (tester) async {
+    final store = _MemoryBooks(Book(id: 1, title: 'Atomic Habits', author: 'James Clear'));
+    await tester.pumpWidget(MaterialApp(home: BookDetailScreen(bookId: 1, repository: store)));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cập nhật tiến độ'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Chỉnh sửa sách'));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditBookScreen), findsOneWidget);
+
+    await tester.ensureVisible(find.byType(TextFormField).at(2));
+    await tester.enterText(find.byType(TextFormField).at(2), '100');
+    await tester.tap(find.text('Lưu thay đổi'));
+    await tester.pumpAndSettle();
+
+    expect(store.book!.totalPages, 100);
+    expect(find.text('0 / 100 trang'), findsOneWidget);
   });
 }
