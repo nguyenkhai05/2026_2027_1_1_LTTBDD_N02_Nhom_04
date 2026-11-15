@@ -12,6 +12,7 @@ class BookFormField extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.textInputAction,
+    this.maxLines = 1,
   });
 
   final String label;
@@ -20,6 +21,7 @@ class BookFormField extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -32,6 +34,7 @@ class BookFormField extends StatelessWidget {
         validator: validator,
         keyboardType: keyboardType,
         textInputAction: textInputAction,
+        maxLines: maxLines,
         decoration: bookFieldDecoration(hint),
       ),
     ],
