@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 class HomeBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -26,29 +27,29 @@ class HomeBottomNavigation extends StatelessWidget {
       iconSize: 20,
       elevation: 0,
 
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: 'Trang chủ',
+          icon: const Icon(Icons.home_outlined),
+          activeIcon: const Icon(Icons.home),
+          label: tr(context, 'Trang chủ'),
         ),
 
         BottomNavigationBarItem(
-          icon: Icon(Icons.menu_book_outlined),
-          activeIcon: Icon(Icons.menu_book),
-          label: 'Thư viện',
+          icon: const Icon(Icons.menu_book_outlined),
+          activeIcon: const Icon(Icons.menu_book),
+          label: tr(context, 'Thư viện'),
         ),
 
         BottomNavigationBarItem(
-          icon: Icon(Icons.bar_chart_outlined),
-          activeIcon: Icon(Icons.bar_chart),
-          label: 'Thống kê',
+          icon: const Icon(Icons.bar_chart_outlined),
+          activeIcon: const Icon(Icons.bar_chart),
+          label: tr(context, 'Thống kê'),
         ),
 
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings_outlined),
-          activeIcon: Icon(Icons.settings),
-          label: 'Cài đặt',
+          icon: const Icon(Icons.settings_outlined),
+          activeIcon: const Icon(Icons.settings),
+          label: tr(context, 'Cài đặt'),
         ),
       ],
     );

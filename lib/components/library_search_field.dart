@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 class LibrarySearchField extends StatelessWidget {
   const LibrarySearchField({super.key, required this.controller});
@@ -10,12 +11,12 @@ class LibrarySearchField extends StatelessWidget {
     controller: controller,
     textInputAction: TextInputAction.search,
     decoration: InputDecoration(
-      hintText: 'Tìm tên sách hoặc tác giả',
+      hintText: tr(context, 'Tìm tên sách hoặc tác giả'),
       prefixIcon: const Icon(Icons.search),
       suffixIcon: controller.text.isEmpty
           ? null
           : IconButton(
-              tooltip: 'Xóa từ khóa',
+              tooltip: tr(context, 'Xóa từ khóa'),
               icon: const Icon(Icons.close),
               onPressed: controller.clear,
             ),

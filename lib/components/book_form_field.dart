@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../theme/library_colors.dart';
 
@@ -27,15 +28,18 @@ class BookFormField extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label, style: const TextStyle(fontSize: 14, color: libraryInk)),
+      LText(label, style: const TextStyle(fontSize: 14, color: libraryInk)),
       const SizedBox(height: 10),
       TextFormField(
         controller: controller,
-        validator: validator,
+        validator: validator == null ? null : (value) {
+          final error = validator!(value);
+          return error == null ? null : tr(context, error);
+        },
         keyboardType: keyboardType,
         textInputAction: textInputAction,
         maxLines: maxLines,
-        decoration: bookFieldDecoration(hint),
+        decoration: bookFieldDecoration(tr(context, hint)),
       ),
     ],
   );
@@ -61,13 +65,13 @@ class BookFormDropdown<T> extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label, style: const TextStyle(fontSize: 14, color: libraryInk)),
+      LText(label, style: const TextStyle(fontSize: 14, color: libraryInk)),
       const SizedBox(height: 10),
       DropdownButtonFormField<T>(
         initialValue: value,
         items: items,
         onChanged: onChanged,
-        decoration: bookFieldDecoration(hint),
+        decoration: bookFieldDecoration(tr(context, hint)),
       ),
     ],
   );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../components/book_detail_sections.dart';
 import '../components/library_delete_dialog.dart';
@@ -43,7 +44,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   }
 
   void _notify(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: LText(message)));
   }
 
   Future<void> _editBook(Book book) async {
@@ -158,13 +159,13 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                           backgroundColor: const Color(0xFFE8EFE6),
                           foregroundColor: libraryGreen,
                         ),
-                        child: const Text('Chỉnh sửa'),
+                        child: const LText('Chỉnh sửa'),
                       ),
                       const SizedBox(height: 12),
                       OutlinedButton.icon(
                         onPressed: _saving ? null : () => _deleteBook(book),
                         icon: const Icon(Icons.delete_outline),
-                        label: const Text('Xóa sách'),
+                        label: const LText('Xóa sách'),
                         style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFB74742)),
                       ),
                     ],
@@ -178,7 +179,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                     child: FilledButton(
                       onPressed: _saving ? null : () => _updateProgress(book),
                       style: FilledButton.styleFrom(backgroundColor: libraryGreen),
-                      child: const Text('Cập nhật tiến độ'),
+                      child: const LText('Cập nhật tiến độ'),
                     ),
                   ),
                 ),
@@ -196,16 +197,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       children: [
         IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          tooltip: 'Quay lại',
+          tooltip: tr(context, 'Quay lại'),
           icon: const Icon(Icons.arrow_back, color: libraryGreen),
         ),
         const Expanded(
-          child: Text('Chi tiết sách', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: libraryInk)),
+          child: LText('Chi tiết sách', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: libraryInk)),
         ),
         if (book != null)
           IconButton(
             onPressed: _saving ? null : () => _toggleFavorite(book),
-            tooltip: book.isFavorite ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích',
+            tooltip: tr(context, book.isFavorite ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích'),
             icon: Icon(book.isFavorite ? Icons.favorite : Icons.favorite_border, color: libraryGreen),
           ),
       ],
@@ -216,8 +217,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(text),
-        if (retry != null) TextButton(onPressed: retry, child: const Text('Thử lại')),
+        LText(text),
+        if (retry != null) TextButton(onPressed: retry, child: const LText('Thử lại')),
       ],
     ),
   );

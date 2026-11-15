@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../components/home_bottom_navigation.dart';
 import '../components/library_book_card.dart';
@@ -10,6 +11,7 @@ import '../components/library_status_filters.dart';
 import '../components/update_progress_sheet.dart';
 import '../data/book_repository.dart';
 import '../models/book.dart';
+import '../models/app_language.dart';
 import '../models/library_query.dart';
 import '../theme/library_colors.dart';
 import 'edit_book_screen.dart';
@@ -91,7 +93,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Không thể cập nhật yêu thích. Thử lại nhé.'),
+            content: LText('Không thể cập nhật yêu thích. Thử lại nhé.'),
           ),
         );
       }
@@ -134,7 +136,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
+          content: LText(
             currentPage == book.totalPages
                 ? 'Bạn đã đọc hết sách. Có thể chuyển trạng thái sang Đã đọc.'
                 : 'Đã cập nhật tiến độ đọc.',
@@ -145,7 +147,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Không thể cập nhật tiến độ. Thử lại nhé.'),
+            content: LText('Không thể cập nhật tiến độ. Thử lại nhé.'),
           ),
         );
       }
@@ -192,11 +194,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Đã xóa sách thành công.')));
+      ).showSnackBar(const SnackBar(content: LText('Đã xóa sách thành công.')));
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Không thể xóa sách. Hãy thử lại.')),
+          const SnackBar(content: LText('Không thể xóa sách. Hãy thử lại.')),
         );
       }
     } finally {
@@ -215,7 +217,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     if (mounted) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Đã thêm sách thành công.')));
+      ).showSnackBar(const SnackBar(content: LText('Đã thêm sách thành công.')));
     }
   }
 
@@ -240,7 +242,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               onPressed: _handleAddBook,
               backgroundColor: libraryGreen,
               foregroundColor: Colors.white,
-              tooltip: 'Thêm sách',
+              tooltip: tr(context, 'Thêm sách'),
               child: const Icon(Icons.add),
             ),
       body: SafeArea(
@@ -293,7 +295,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(20, 32, 20, 100),
         children: [
-          const Text(
+          const LText(
             'Thư viện của tôi',
             style: TextStyle(
               fontSize: 28,
@@ -303,7 +305,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            '${all.length} cuốn sách · Góc đọc của bạn',
+            AppLanguageScope.of(context) == AppLanguage.english
+                ? '${all.length} books · Your reading corner'
+                : '${all.length} cuốn sách · Góc đọc của bạn',
             style: const TextStyle(fontSize: 14, color: libraryMuted),
           ),
           const SizedBox(height: 22),
@@ -319,8 +323,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
               Expanded(
                 child: Text(
                   filtersActive || hasQuery
-                      ? '${visible.length} cuốn sách'
-                      : 'Tất cả sách',
+                      ? (AppLanguageScope.of(context) == AppLanguage.english
+                          ? '${visible.length} books'
+                          : '${visible.length} cuốn sách')
+                      : tr(context, 'Tất cả sách'),
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
@@ -333,7 +339,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   Icons.tune,
                   color: filtersActive ? libraryGreen : libraryMuted,
                 ),
-                tooltip: 'Lọc sách',
+                tooltip: tr(context, 'Lọc sách'),
                 onPressed: () => _openFilters(all),
               ),
             ],
@@ -390,7 +396,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }) => ListView(
     padding: const EdgeInsets.fromLTRB(20, 32, 20, 20),
     children: [
-      const Text(
+      const LText(
         'Thư viện của tôi',
         style: TextStyle(
           fontSize: 28,

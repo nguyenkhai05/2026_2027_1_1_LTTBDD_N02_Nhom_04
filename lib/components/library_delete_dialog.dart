@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 Future<bool> showLibraryDeleteDialog(
   BuildContext context, {
@@ -18,7 +19,7 @@ Future<bool> showLibraryDeleteDialog(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              const LText(
                 'Xóa sách?',
                 style: TextStyle(
                   fontSize: 22,
@@ -30,7 +31,8 @@ Future<bool> showLibraryDeleteDialog(
               const SizedBox(height: 16),
 
               Text(
-                'Bạn có chắc muốn xóa "$bookTitle" khỏi thư viện không?',
+                tr(context, 'Bạn có chắc muốn xóa "{title}" khỏi thư viện không?')
+                    .replaceAll('{title}', bookTitle),
                 style: const TextStyle(
                   fontSize: 14,
                   height: 1.5,
@@ -40,7 +42,7 @@ Future<bool> showLibraryDeleteDialog(
 
               const SizedBox(height: 12),
 
-              const Text(
+              const LText(
                 'Thao tác này không thể hoàn tác.',
                 style: TextStyle(fontSize: 13, color: Color(0xFF6C746A)),
               ),
@@ -64,7 +66,7 @@ Future<bool> showLibraryDeleteDialog(
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
-                        child: const Text(
+                        child: const LText(
                           'Hủy',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
@@ -89,7 +91,7 @@ Future<bool> showLibraryDeleteDialog(
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
-                        child: const Text(
+                        child: const LText(
                           'Xóa',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),

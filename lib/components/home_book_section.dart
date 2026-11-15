@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../models/book.dart';
 import '../theme/library_colors.dart';
@@ -31,7 +32,7 @@ class HomeBookSection extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          LText(
             title,
             style: const TextStyle(
               fontSize: 17,
@@ -39,7 +40,7 @@ class HomeBookSection extends StatelessWidget {
               color: libraryInk,
             ),
           ),
-          TextButton(onPressed: onViewAll, child: const Text('Xem tất cả')),
+          TextButton(onPressed: onViewAll, child: const LText('Xem tất cả')),
         ],
       ),
       const SizedBox(height: 12),
@@ -60,7 +61,7 @@ class HomeBookSection extends StatelessWidget {
             children: [
               const Icon(Icons.menu_book_outlined, size: 30, color: libraryGreen),
               const SizedBox(height: 8),
-              Text(
+              LText(
                 emptyTitle,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -70,14 +71,14 @@ class HomeBookSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 5),
-              Text(
+              LText(
                 emptyDescription,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 11, color: libraryMuted),
               ),
               if (onAddBook != null) ...[
                 const SizedBox(height: 12),
-                FilledButton(onPressed: onAddBook, child: const Text('Thêm sách đầu tiên')),
+                FilledButton(onPressed: onAddBook, child: const LText('Thêm sách đầu tiên')),
               ],
             ],
           ),

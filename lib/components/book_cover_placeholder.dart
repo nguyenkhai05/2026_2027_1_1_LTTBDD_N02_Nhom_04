@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../theme/library_colors.dart';
 
@@ -19,7 +20,7 @@ class BookCoverPlaceholder extends StatelessWidget {
       children: [
         Icon(Icons.menu_book_outlined, color: libraryGreen, size: 26),
         SizedBox(height: 8),
-        Text('Chưa có bìa', style: TextStyle(fontSize: 9, color: libraryMuted)),
+        LText('Chưa có bìa', style: TextStyle(fontSize: 9, color: libraryMuted)),
       ],
     ),
   );

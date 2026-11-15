@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../components/book_cover_placeholder.dart';
 import '../components/book_form_field.dart';
@@ -48,7 +49,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
     if (_saving) return;
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Không thể lưu. Vui lòng kiểm tra thông tin.')),
+        const SnackBar(content: LText('Không thể lưu. Vui lòng kiểm tra thông tin.')),
       );
       return;
     }
@@ -59,7 +60,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Không thể lưu sách. Hãy thử lại.')),
+          const SnackBar(content: LText('Không thể lưu sách. Hãy thử lại.')),
         );
       }
     } finally {
@@ -71,7 +72,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: const Color(0xFFF7F6F0),
     appBar: AppBar(
-      title: const Text('Thêm sách', style: TextStyle(fontWeight: FontWeight.bold)),
+      title: const LText('Thêm sách', style: TextStyle(fontWeight: FontWeight.bold)),
       backgroundColor: const Color(0xFFF7F6F0),
       foregroundColor: libraryInk,
       surfaceTintColor: Colors.transparent,
@@ -87,7 +88,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
             children: [
             const Center(child: BookCoverPlaceholder()),
             const SizedBox(height: 28),
-            const Text(
+            const LText(
               'Thông tin cơ bản',
               style: TextStyle(
                 fontSize: 19,
@@ -117,10 +118,10 @@ class _AddBookScreenState extends State<AddBookScreen> {
               hint: 'Chọn thể loại',
               value: _genre,
               items: const [
-                DropdownMenuItem(value: 'Văn học', child: Text('Văn học')),
-                DropdownMenuItem(value: 'Công nghệ', child: Text('Công nghệ')),
-                DropdownMenuItem(value: 'Kinh tế', child: Text('Kinh tế')),
-                DropdownMenuItem(value: 'Kỹ năng sống', child: Text('Kỹ năng sống')),
+                DropdownMenuItem(value: 'Văn học', child: LText('Văn học')),
+                DropdownMenuItem(value: 'Công nghệ', child: LText('Công nghệ')),
+                DropdownMenuItem(value: 'Kinh tế', child: LText('Kinh tế')),
+                DropdownMenuItem(value: 'Kỹ năng sống', child: LText('Kỹ năng sống')),
               ],
               onChanged: (value) => setState(() => _genre = value),
             ),
@@ -146,10 +147,10 @@ class _AddBookScreenState extends State<AddBookScreen> {
               hint: 'Chọn trạng thái đọc',
               value: _status,
               items: const [
-                DropdownMenuItem(value: BookStatus.wantToRead, child: Text('Muốn đọc')),
-                DropdownMenuItem(value: BookStatus.reading, child: Text('Đang đọc')),
-                DropdownMenuItem(value: BookStatus.completed, child: Text('Đã đọc')),
-                DropdownMenuItem(value: BookStatus.paused, child: Text('Tạm dừng')),
+                DropdownMenuItem(value: BookStatus.wantToRead, child: LText('Muốn đọc')),
+                DropdownMenuItem(value: BookStatus.reading, child: LText('Đang đọc')),
+                DropdownMenuItem(value: BookStatus.completed, child: LText('Đã đọc')),
+                DropdownMenuItem(value: BookStatus.paused, child: LText('Tạm dừng')),
               ],
               onChanged: (value) => setState(() => _status = value ?? _status),
             ),
@@ -173,7 +174,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Lưu sách'),
+                : const LText('Lưu sách'),
           ),
         ),
       ),

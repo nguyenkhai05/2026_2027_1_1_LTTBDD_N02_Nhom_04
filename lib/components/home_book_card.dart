@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../models/book.dart';
 import '../theme/library_colors.dart';
@@ -61,7 +62,7 @@ class HomeBookCard extends StatelessWidget {
                         color: libraryGreen,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Text(
+                      child: LText(
                         statusText,
                         style: const TextStyle(fontSize: 9, color: Colors.white),
                       ),

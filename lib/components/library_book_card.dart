@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../models/book.dart';
 import '../theme/library_colors.dart';
@@ -67,9 +68,9 @@ class LibraryBookCard extends StatelessWidget {
 
                     IconButton(
                       onPressed: onFavorite,
-                      tooltip: book.isFavorite
+                      tooltip: tr(context, book.isFavorite
                           ? 'Bỏ khỏi yêu thích'
-                          : 'Thêm vào yêu thích',
+                          : 'Thêm vào yêu thích'),
                       visualDensity: VisualDensity.compact,
                       icon: Icon(
                         book.isFavorite
@@ -81,7 +82,7 @@ class LibraryBookCard extends StatelessWidget {
 
                     IconButton(
                       onPressed: onUpdateProgress,
-                      tooltip: 'Cập nhật tiến độ',
+                      tooltip: tr(context, 'Cập nhật tiến độ'),
                       visualDensity: VisualDensity.compact,
                       icon: const Icon(
                         Icons.edit_note_outlined,
@@ -91,7 +92,7 @@ class LibraryBookCard extends StatelessWidget {
 
                     IconButton(
                       onPressed: onDelete,
-                      tooltip: 'Xóa sách',
+                      tooltip: tr(context, 'Xóa sách'),
                       visualDensity: VisualDensity.compact,
                       icon: const Icon(
                         Icons.delete_outline,
@@ -142,7 +143,7 @@ class LibraryBookCard extends StatelessWidget {
         color: active ? libraryGreen : const Color(0xFFE8EFE6),
         borderRadius: BorderRadius.circular(18),
       ),
-      child: Text(
+      child: LText(
         label,
         style: TextStyle(
           fontSize: 11,

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../models/book.dart';
 import '../models/reading_statistics.dart';
@@ -47,7 +48,7 @@ class StatisticsSummaryCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 5),
-          Text(
+          LText(
             label,
             style: const TextStyle(color: libraryMuted, fontSize: 11),
           ),
@@ -81,7 +82,7 @@ class ReadingStatusChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          const LText(
             'Trạng thái đọc',
             style: TextStyle(
               color: libraryInk,
@@ -170,7 +171,7 @@ class _LegendItem extends StatelessWidget {
           ),
           const SizedBox(width: 7),
           Expanded(
-            child: Text(
+            child: LText(
               label,
               style: const TextStyle(color: libraryInk, fontSize: 10),
             ),

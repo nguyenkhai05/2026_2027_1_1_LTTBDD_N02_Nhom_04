@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../components/book_cover_thumbnail.dart';
 import '../components/book_form_field.dart';
@@ -77,7 +78,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
     if (_saving) return;
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Không thể lưu. Vui lòng kiểm tra thông tin.')),
+        const SnackBar(content: LText('Không thể lưu. Vui lòng kiểm tra thông tin.')),
       );
       return;
     }
@@ -89,7 +90,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Không thể lưu thay đổi. Hãy thử lại.')),
+          const SnackBar(content: LText('Không thể lưu thay đổi. Hãy thử lại.')),
         );
       }
     } finally {
@@ -106,7 +107,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F6F0),
       appBar: AppBar(
-        title: const Text('Chỉnh sửa sách', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const LText('Chỉnh sửa sách', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFFF7F6F0),
         foregroundColor: libraryInk,
         surfaceTintColor: Colors.transparent,
@@ -122,7 +123,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
               children: [
                 Center(child: BookCoverThumbnail(book: widget.book, width: 100, height: 150)),
                 const SizedBox(height: 28),
-                const Text('Thông tin cơ bản', style: TextStyle(
+                const LText('Thông tin cơ bản', style: TextStyle(
                   fontSize: 19, fontWeight: FontWeight.bold, color: libraryInk,
                 )),
                 const SizedBox(height: 18),
@@ -141,9 +142,9 @@ class _EditBookScreenState extends State<EditBookScreen> {
                 BookFormDropdown<String>(
                   label: 'Thể loại', hint: 'Chưa phân loại', value: _genre,
                   items: [
-                    const DropdownMenuItem<String>(value: null, child: Text('Chưa phân loại')),
+                    const DropdownMenuItem<String>(value: null, child: LText('Chưa phân loại')),
                     for (final genre in genres)
-                      DropdownMenuItem<String>(value: genre, child: Text(genre)),
+                      DropdownMenuItem<String>(value: genre, child: Text(tr(context, genre))),
                   ],
                   onChanged: (value) => setState(() { _genre = value; }),
                 ),
@@ -163,10 +164,10 @@ class _EditBookScreenState extends State<EditBookScreen> {
                 BookFormDropdown<BookStatus>(
                   label: 'Trạng thái đọc *', hint: 'Chọn trạng thái đọc', value: _status,
                   items: const [
-                    DropdownMenuItem(value: BookStatus.wantToRead, child: Text('Muốn đọc')),
-                    DropdownMenuItem(value: BookStatus.reading, child: Text('Đang đọc')),
-                    DropdownMenuItem(value: BookStatus.completed, child: Text('Đã đọc')),
-                    DropdownMenuItem(value: BookStatus.paused, child: Text('Tạm dừng')),
+                    DropdownMenuItem(value: BookStatus.wantToRead, child: LText('Muốn đọc')),
+                    DropdownMenuItem(value: BookStatus.reading, child: LText('Đang đọc')),
+                    DropdownMenuItem(value: BookStatus.completed, child: LText('Đã đọc')),
+                    DropdownMenuItem(value: BookStatus.paused, child: LText('Tạm dừng')),
                   ],
                   onChanged: (value) => setState(() { _status = value ?? _status; }),
                 ),
@@ -197,7 +198,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
               child: _saving
                   ? const SizedBox(width: 20, height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Text('Lưu thay đổi'),
+                  : const LText('Lưu thay đổi'),
             ),
           ),
         ),

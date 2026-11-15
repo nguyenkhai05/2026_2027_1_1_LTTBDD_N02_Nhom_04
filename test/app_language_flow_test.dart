@@ -5,6 +5,8 @@ import 'package:lt_tbdd/data/app_language_store.dart';
 import 'package:lt_tbdd/data/book_repository.dart';
 import 'package:lt_tbdd/models/app_language.dart';
 import 'package:lt_tbdd/models/book.dart';
+import 'package:lt_tbdd/components/library_book_card.dart';
+import 'package:lt_tbdd/screens/edit_book_screen.dart';
 
 class _MemoryLanguage implements AppLanguageStore {
   AppLanguage value = AppLanguage.vietnamese;
@@ -21,10 +23,18 @@ class _MemoryLanguage implements AppLanguageStore {
 }
 
 class _EmptyBooks implements BookStore {
+  _EmptyBooks([this.books = const []]);
+  final List<Book> books;
+
   @override
-  Future<List<Book>> getAll() async => [];
+  Future<List<Book>> getAll() async => List.of(books);
   @override
-  Future<Book?> getById(int id) async => null;
+  Future<Book?> getById(int id) async {
+    for (final book in books) {
+      if (book.id == id) return book;
+    }
+    return null;
+  }
   @override
   Future<int> insert(Book book) async => 1;
   @override
@@ -72,5 +82,37 @@ void main() {
     expect(settings.value, AppLanguage.vietnamese);
     expect(find.text('Ngôn ngữ của bạn'), findsOneWidget);
     expect(find.text('Không thể lưu ngôn ngữ. Hãy thử lại.'), findsOneWidget);
+  });
+
+  testWidgets('English translates screens but leaves book titles unchanged', (tester) async {
+    final settings = _MemoryLanguage()..value = AppLanguage.english;
+    final books = _EmptyBooks([
+      Book(id: 1, title: 'Đang đọc', author: 'Tác giả',
+          genre: 'Văn học', status: BookStatus.reading,
+          totalPages: 200, currentPage: 50),
+    ]);
+    await tester.pumpWidget(MyApp(repository: books, languageStore: settings));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Hello!'), findsOneWidget);
+    expect(find.text('Đang đọc'), findsWidgets);
+    expect(find.text('Reading'), findsWidgets);
+    await tester.tap(find.text('Library'));
+    await tester.pumpAndSettle();
+    expect(find.text('My library'), findsOneWidget);
+    expect(find.text('Đang đọc'), findsOneWidget);
+
+    await tester.tap(find.byType(LibraryBookCard));
+    await tester.pumpAndSettle();
+    expect(find.text('Book details'), findsOneWidget);
+    expect(find.text('Đang đọc'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Edit'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditBookScreen), findsOneWidget);
+    expect(find.text('Book title *'), findsOneWidget);
+    expect(tester.widget<TextFormField>(find.byType(TextFormField).first)
+        .controller!.text, 'Đang đọc');
   });
 }

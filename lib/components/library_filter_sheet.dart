@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../models/book.dart';
 import '../models/library_query.dart';
@@ -96,7 +97,7 @@ class _LibraryFilterSheetState extends State<LibraryFilterSheet> {
                       Row(
                         children: [
                           const Expanded(
-                            child: Text(
+                            child: LText(
                               'Lọc sách',
                               style: TextStyle(
                                 fontSize: 22,
@@ -223,7 +224,7 @@ class _LibraryFilterSheetState extends State<LibraryFilterSheet> {
                               borderRadius: BorderRadius.circular(14),
                             ),
                           ),
-                          child: const Text(
+                          child: const LText(
                             'Đặt lại',
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
@@ -247,7 +248,7 @@ class _LibraryFilterSheetState extends State<LibraryFilterSheet> {
                               borderRadius: BorderRadius.circular(14),
                             ),
                           ),
-                          child: const Text(
+                          child: const LText(
                             'Áp dụng',
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
@@ -265,7 +266,7 @@ class _LibraryFilterSheetState extends State<LibraryFilterSheet> {
   }
 
   Widget _sectionTitle(String title) {
-    return Text(
+    return LText(
       title,
       style: const TextStyle(
         fontSize: 14,
@@ -286,7 +287,7 @@ class _LibraryFilterSheetState extends State<LibraryFilterSheet> {
           borderRadius: BorderRadius.circular(30),
         ),
         child: Text(
-          label,
+          tr(context, label),
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,

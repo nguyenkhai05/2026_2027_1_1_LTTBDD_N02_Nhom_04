@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
@@ -8,7 +9,7 @@ class HomeHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        const LText(
           'M Y S H E L F',
           style: TextStyle(
             fontSize: 12,
@@ -20,7 +21,7 @@ class HomeHeader extends StatelessWidget {
 
         const SizedBox(height: 12),
 
-        const Text(
+        const LText(
           'Xin chào!',
           style: TextStyle(
             fontSize: 28,
@@ -31,7 +32,7 @@ class HomeHeader extends StatelessWidget {
 
         const SizedBox(height: 4),
 
-        const Text(
+        const LText(
           'Hôm nay bạn muốn đọc gì?',
           style: TextStyle(fontSize: 14, color: Color(0xFF777D73)),
         ),

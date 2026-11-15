@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 class OverviewCard extends StatelessWidget {
   const OverviewCard({
@@ -53,7 +54,7 @@ class _OverviewItem extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        Text(label, style: const TextStyle(fontSize: 10, color: Colors.white)),
+        LText(label, style: const TextStyle(fontSize: 10, color: Colors.white)),
       ],
     );
   }

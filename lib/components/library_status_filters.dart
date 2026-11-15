@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../models/book.dart';
 import '../theme/library_colors.dart';
@@ -31,7 +32,7 @@ class LibraryStatusFilters extends StatelessWidget {
   Widget _chip(String label, BookStatus? value) => Padding(
     padding: const EdgeInsets.only(right: 8),
     child: ChoiceChip(
-      label: Text(label),
+      label: LText(label),
       selected: selected == value,
       onSelected: (_) => onChanged(value),
       showCheckmark: false,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 import 'package:flutter/services.dart';
 
 import '../models/book.dart';
@@ -121,7 +122,7 @@ class _UpdateProgressSheetState extends State<UpdateProgressSheet> {
               Row(
                 children: [
                   const Expanded(
-                    child: Text(
+                    child: LText(
                       'Cập nhật tiến độ',
                       style: TextStyle(
                         color: libraryInk,
@@ -132,7 +133,7 @@ class _UpdateProgressSheetState extends State<UpdateProgressSheet> {
                   ),
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    tooltip: 'Đóng',
+                    tooltip: tr(context, 'Đóng'),
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(
                       Icons.close,
@@ -158,11 +159,11 @@ class _UpdateProgressSheetState extends State<UpdateProgressSheet> {
                 _MissingTotalPages(onEditBook: widget.onEditBook)
               else ...[
                 Text(
-                  'Hiện tại: ${widget.book.currentPage} / $total trang',
+                  '${tr(context, 'Hiện tại')}: ${widget.book.currentPage} / $total ${tr(context, 'trang')}',
                   style: const TextStyle(color: libraryMuted, fontSize: 11),
                 ),
                 const SizedBox(height: 14),
-                const Text(
+                const LText(
                   'Bạn hiện đã đọc đến trang',
                   style: TextStyle(color: libraryInk, fontSize: 12),
                 ),
@@ -185,7 +186,7 @@ class _UpdateProgressSheetState extends State<UpdateProgressSheet> {
                       color: libraryMuted,
                       fontSize: 11,
                     ),
-                    errorText: _errorText,
+                    errorText: _errorText == null ? null : tr(context, _errorText!),
                     enabledBorder: _inputBorder(),
                     focusedBorder: _inputBorder(
                       color: libraryGreen,
@@ -211,7 +212,7 @@ class _UpdateProgressSheetState extends State<UpdateProgressSheet> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${(progress * 100).round()}% hoàn thành',
+                    '${(progress * 100).round()}% ${tr(context, 'hoàn thành')}',
                     style: const TextStyle(
                       color: libraryGreen,
                       fontSize: 11,
@@ -234,7 +235,7 @@ class _UpdateProgressSheetState extends State<UpdateProgressSheet> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text(
+                    child: const LText(
                       'Lưu tiến độ',
                       style: TextStyle(
                         fontSize: 12,
@@ -269,7 +270,7 @@ class _MissingTotalPages extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
+      const LText(
         'Chưa có thông tin tổng số trang',
         style: TextStyle(
           color: libraryGreen,
@@ -278,7 +279,7 @@ class _MissingTotalPages extends StatelessWidget {
         ),
       ),
       const SizedBox(height: 10),
-      const Text(
+      const LText(
         'Bổ sung tổng số trang trong Chỉnh sửa sách trước khi cập nhật tiến độ theo trang.',
         style: TextStyle(color: libraryMuted, fontSize: 11, height: 1.45),
       ),
@@ -295,7 +296,7 @@ class _MissingTotalPages extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          child: const Text(
+          child: const LText(
             'Chỉnh sửa sách',
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),

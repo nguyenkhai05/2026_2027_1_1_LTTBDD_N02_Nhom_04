@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../models/book.dart';
 import '../theme/library_colors.dart';
@@ -44,7 +45,7 @@ class BookDetailIdentity extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Text(book.genre!, style: const TextStyle(color: libraryGreen)),
+                  child: Text(tr(context, book.genre!), style: const TextStyle(color: libraryGreen)),
                 ),
               ],
             ],
@@ -75,14 +76,14 @@ class BookDetailReading extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Expanded(child: Text('Trạng thái đọc', style: TextStyle(fontSize: 16, color: libraryInk))),
+            const Expanded(child: LText('Trạng thái đọc', style: TextStyle(fontSize: 16, color: libraryInk))),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
               decoration: BoxDecoration(
                 color: book.status == BookStatus.reading ? libraryGreen : const Color(0xFFE8EFE6),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(status, style: TextStyle(color: book.status == BookStatus.reading ? Colors.white : libraryGreen)),
+              child: LText(status, style: TextStyle(color: book.status == BookStatus.reading ? Colors.white : libraryGreen)),
             ),
           ],
         ),
@@ -91,9 +92,9 @@ class BookDetailReading extends StatelessWidget {
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Chưa có thông tin tổng số trang', style: TextStyle(color: libraryMuted)),
+              LText('Chưa có thông tin tổng số trang', style: TextStyle(color: libraryMuted)),
               SizedBox(height: 8),
-              Text('Bổ sung tổng số trang trong Chỉnh sửa để cập nhật tiến độ.', style: TextStyle(color: libraryMuted)),
+              LText('Bổ sung tổng số trang trong Chỉnh sửa để cập nhật tiến độ.', style: TextStyle(color: libraryMuted)),
             ],
           )
         else
@@ -104,11 +105,11 @@ class BookDetailReading extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Tiến độ đọc', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: libraryInk)),
+                const LText('Tiến độ đọc', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: libraryInk)),
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Expanded(child: Text('${book.currentPage} / ${book.totalPages} trang')),
+                    Expanded(child: Text('${book.currentPage} / ${book.totalPages} ${tr(context, 'trang')}')),
                     Text('${(progress * 100).round()}%', style: const TextStyle(color: libraryGreen, fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -129,20 +130,20 @@ class BookDetailReading extends StatelessWidget {
           const SizedBox(height: 20),
           Row(children: [
             if (book.genre != null)
-              Expanded(child: _Metadata(label: 'THỂ LOẠI', value: book.genre!)),
+              Expanded(child: _Metadata(label: 'THỂ LOẠI', value: tr(context, book.genre!))),
             if (book.totalPages != null)
-              Expanded(child: _Metadata(label: 'TỔNG SỐ TRANG', value: '${book.totalPages} trang')),
+              Expanded(child: _Metadata(label: 'TỔNG SỐ TRANG', value: '${book.totalPages} ${tr(context, 'trang')}')),
           ]),
         ],
         if (book.description != null) ...[
           const SizedBox(height: 26),
-          const Text('Mô tả', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: libraryInk)),
+          const LText('Mô tả', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: libraryInk)),
           const SizedBox(height: 12),
           Text(book.description!, style: const TextStyle(color: libraryMuted, height: 1.5)),
         ],
         if (book.notes != null) ...[
           const SizedBox(height: 26),
-          const Text('Ghi chú cá nhân', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: libraryInk)),
+          const LText('Ghi chú cá nhân', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: libraryInk)),
           const SizedBox(height: 12),
           Text(book.notes!, style: const TextStyle(color: libraryMuted, height: 1.5)),
         ],
@@ -160,7 +161,7 @@ class _Metadata extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label, style: const TextStyle(color: libraryMuted, fontSize: 11, fontWeight: FontWeight.w600)),
+      LText(label, style: const TextStyle(color: libraryMuted, fontSize: 11, fontWeight: FontWeight.w600)),
       const SizedBox(height: 7),
       Text(value, style: const TextStyle(color: libraryInk, fontSize: 15)),
     ],

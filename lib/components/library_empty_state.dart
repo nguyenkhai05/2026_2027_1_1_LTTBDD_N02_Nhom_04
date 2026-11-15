@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../theme/library_colors.dart';
 
@@ -32,7 +33,7 @@ class LibraryEmptyState extends StatelessWidget {
         child: Icon(icon, color: libraryGreen, size: 32),
       ),
       const SizedBox(height: 20),
-      Text(
+      LText(
         title,
         textAlign: TextAlign.center,
         style: const TextStyle(
@@ -42,7 +43,7 @@ class LibraryEmptyState extends StatelessWidget {
         ),
       ),
       const SizedBox(height: 14),
-      Text(
+      LText(
         description,
         textAlign: TextAlign.center,
         style: const TextStyle(color: libraryMuted, height: 1.5),
@@ -55,7 +56,7 @@ class LibraryEmptyState extends StatelessWidget {
           child: FilledButton(
             onPressed: onAction,
             style: FilledButton.styleFrom(backgroundColor: libraryGreen),
-            child: Text(action!),
+            child: LText(action!),
           ),
         ),
       ],

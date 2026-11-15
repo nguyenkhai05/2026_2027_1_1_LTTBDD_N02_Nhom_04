@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../components/home_book_section.dart';
 import '../components/home_bottom_navigation.dart';
@@ -79,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('Không thể tải trang chủ.'),
-                  TextButton(onPressed: _refresh, child: const Text('Thử lại')),
+                  const LText('Không thể tải trang chủ.'),
+                  TextButton(onPressed: _refresh, child: const LText('Thử lại')),
                 ],
               ),
             );

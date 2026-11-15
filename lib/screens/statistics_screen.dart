@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_text.dart';
 
 import '../components/home_bottom_navigation.dart';
 import '../components/statistics_components.dart';
@@ -104,7 +105,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
                 children: [
-                  const Text(
+                  const LText(
                     'Thống kê đọc sách',
                     style: TextStyle(
                       color: libraryInk,
@@ -113,7 +114,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
+                  const LText(
                     'Mỗi cuốn sách là một hành trình.',
                     style: TextStyle(color: libraryMuted, fontSize: 12),
                   ),
@@ -198,7 +199,7 @@ class _EmptyStatistics extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 14),
-            const Text(
+            const LText(
               'Chưa có dữ liệu thống kê',
               style: TextStyle(
                 color: Color(0xFF354B36),
@@ -207,7 +208,7 @@ class _EmptyStatistics extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            const LText(
               'Thêm sách để bắt đầu hành trình đọc của bạn.',
               textAlign: TextAlign.center,
               style: TextStyle(color: libraryMuted, fontSize: 12),
@@ -225,7 +226,7 @@ class _EmptyStatistics extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text('Thêm sách'),
+                child: const LText('Thêm sách'),
               ),
             ),
           ],
@@ -260,11 +261,11 @@ class _MessageState extends StatelessWidget {
           children: [
             Icon(icon, color: libraryGreen, size: 36),
             const SizedBox(height: 12),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+            LText(title, style: const TextStyle(fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
-            Text(description, textAlign: TextAlign.center),
+            LText(description, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            TextButton(onPressed: onAction, child: Text(actionLabel)),
+            TextButton(onPressed: onAction, child: LText(actionLabel)),
           ],
         ),
       ),

@@ -90,7 +90,7 @@ class SettingsScreen extends StatelessWidget {
                           size: 24,
                         ),
                         const SizedBox(width: 12),
-                        const Text(
+                        const LText(
                           'MyShelf',
                           style: TextStyle(
                             color: Color(0xFF354B36),
@@ -348,7 +348,7 @@ class _AboutTeamScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F6F0),
         surfaceTintColor: Colors.transparent,
-        title: const Text('Thông tin nhóm'),
+        title: const LText('Thông tin nhóm'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -363,7 +363,7 @@ class _AboutTeamScreen extends StatelessWidget {
               children: [
                 Icon(Icons.menu_book_outlined, color: libraryGreen, size: 42),
                 SizedBox(height: 12),
-                Text(
+                LText(
                   'MyShelf',
                   style: TextStyle(
                     color: Color(0xFF354B36),
@@ -372,13 +372,13 @@ class _AboutTeamScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                Text(
+                LText(
                   'Ứng dụng quản lý sách cá nhân',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: libraryInk, fontSize: 14),
                 ),
                 SizedBox(height: 10),
-                Text(
+                LText(
                   'Ứng dụng hỗ trợ quản lý thư viện cá nhân và theo dõi tiến độ đọc.',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: libraryMuted, fontSize: 13),
@@ -396,7 +396,7 @@ class _AboutTeamScreen extends StatelessWidget {
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                LText(
                   'Thông tin thành viên',
                   style: TextStyle(
                     color: libraryInk,
@@ -405,16 +405,17 @@ class _AboutTeamScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                Text(
-                  'Thông tin thành viên nhóm sẽ được cập nhật tại đây.',
-                  style: TextStyle(color: libraryMuted, fontSize: 13),
-                ),
+                LText('Nguyễn Quốc Khải · 23010403',
+                    style: TextStyle(color: libraryMuted, fontSize: 13)),
+                SizedBox(height: 6),
+                LText('Phù Ngọc Hào · 23010384',
+                    style: TextStyle(color: libraryMuted, fontSize: 13)),
               ],
             ),
           ),
           const SizedBox(height: 20),
           const Center(
-            child: Text(
+            child: LText(
               'Cảm ơn bạn đã sử dụng MyShelf.',
               style: TextStyle(color: libraryMuted, fontSize: 12),
             ),
