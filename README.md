@@ -1,3 +1,8 @@
+#Thông tin nhóm
+-Nhóm 4
+##Thành viên:
+Nguyễn Quốc Khải-23010403
+Phù Ngọc Hào-23010384
 # MyShelf
 
 Ứng dụng quản lý sách cá nhân bằng Flutter. Đã có trang chủ, thư viện, thêm sách,
