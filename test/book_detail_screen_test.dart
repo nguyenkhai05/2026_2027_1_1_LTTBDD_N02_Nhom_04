@@ -106,7 +106,11 @@ void main() {
     ))));
     await tester.tap(find.text('Mở sách'));
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Xóa sách'));
+    await tester.scrollUntilVisible(
+      find.text('Xóa sách'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('Xóa sách'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Hủy'));
@@ -130,7 +134,11 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: BookDetailScreen(bookId: 1, repository: store)));
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(find.text('Chỉnh sửa'));
+    await tester.scrollUntilVisible(
+      find.text('Chỉnh sửa'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('Chỉnh sửa'));
     await tester.pumpAndSettle();
     expect(find.byType(EditBookScreen), findsOneWidget);
