@@ -9,6 +9,8 @@ class BookFormData {
     this.totalPagesText = '',
     this.currentPageText = '0',
     this.status = BookStatus.wantToRead,
+    this.description,
+    this.notes,
   });
 
   final String title;
@@ -17,6 +19,8 @@ class BookFormData {
   final String totalPagesText;
   final String currentPageText;
   final BookStatus status;
+  final String? description;
+  final String? notes;
 
   BookFormErrors validate() {
     final total = totalPagesText.trim();
@@ -61,12 +65,36 @@ class BookFormData {
       author: author,
       genre: genre,
       status: status,
+      description: description,
+      notes: notes,
       totalPages: totalPagesText.trim().isEmpty
           ? null
           : int.parse(totalPagesText.trim()),
       currentPage: currentPageText.trim().isEmpty
           ? 0
           : int.parse(currentPageText.trim()),
+    );
+  }
+
+  /// Applies editable fields while retaining the stored book's identity,
+  /// cover, favorite flag and creation timestamp. Empty optional text clears it.
+  Book toUpdatedBook(Book original) {
+    if (!validate().isValid) {
+      throw const FormatException('Thông tin sách chưa hợp lệ');
+    }
+    return original.copyWith(
+      title: title,
+      author: author,
+      genre: genre,
+      totalPages: totalPagesText.trim().isEmpty
+          ? null
+          : int.parse(totalPagesText.trim()),
+      currentPage: currentPageText.trim().isEmpty
+          ? 0
+          : int.parse(currentPageText.trim()),
+      status: status,
+      description: description ?? original.description,
+      notes: notes ?? original.notes,
     );
   }
 }

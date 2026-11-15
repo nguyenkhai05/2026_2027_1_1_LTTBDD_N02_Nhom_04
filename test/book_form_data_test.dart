@@ -59,4 +59,55 @@ void main() {
       'Hãy nhập tổng số trang để theo dõi tiến độ',
     );
   });
+
+  test('editing retains stored identity and optional fields while allowing clears', () {
+    final created = DateTime.utc(2026, 1, 1);
+    final original = Book(
+      id: 42,
+      title: 'Sách cũ',
+      author: 'Tác giả cũ',
+      genre: 'Văn học',
+      description: 'Mô tả cũ',
+      notes: 'Ghi chú cũ',
+      coverPath: '/local/cover.png',
+      isFavorite: true,
+      totalPages: 200,
+      currentPage: 120,
+      createdAt: created,
+    );
+    final edited = const BookFormData(
+      title: '  Sách mới  ',
+      author: 'Tác giả mới',
+      totalPagesText: '250',
+      currentPageText: '160',
+      status: BookStatus.reading,
+      description: '',
+      notes: 'Ghi chú mới',
+    ).toUpdatedBook(original);
+
+    expect(edited.id, original.id);
+    expect(edited.title, 'Sách mới');
+    expect(edited.author, 'Tác giả mới');
+    expect(edited.genre, isNull);
+    expect(edited.description, isNull);
+    expect(edited.notes, 'Ghi chú mới');
+    expect(edited.coverPath, original.coverPath);
+    expect(edited.isFavorite, isTrue);
+    expect(edited.createdAt, created);
+    expect(edited.totalPages, 250);
+    expect(edited.currentPage, 160);
+
+    final noPages = const BookFormData(
+      title: 'Sách mới', author: 'Tác giả mới', currentPageText: '0',
+    ).toUpdatedBook(edited);
+    expect(noPages.totalPages, isNull);
+    expect(noPages.currentPage, 0);
+    expect(
+      () => const BookFormData(
+        title: 'Sách', author: 'Tác giả', totalPagesText: '100',
+        currentPageText: '160',
+      ).toUpdatedBook(original),
+      throwsFormatException,
+    );
+  });
 }
