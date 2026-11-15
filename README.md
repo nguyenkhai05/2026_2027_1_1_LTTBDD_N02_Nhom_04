@@ -41,5 +41,3 @@ flutter test
 flutter run
 ```
 
-Trong buổi demo, hãy tự thêm vài sách ở các trạng thái khác nhau để hiển thị
-thống kê và kiểm tra dữ liệu còn sau khi khởi động lại ứng dụng.
