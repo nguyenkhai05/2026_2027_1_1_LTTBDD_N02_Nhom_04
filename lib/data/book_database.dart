@@ -19,7 +19,7 @@ class BookDatabase {
     return _factory.openDatabase(
       location,
       options: OpenDatabaseOptions(
-        version: 1,
+        version: 2,
         onCreate: (db, version) async {
           await db.execute('''
             CREATE TABLE books (
@@ -47,10 +47,21 @@ class BookDatabase {
           await db.execute(
             'CREATE INDEX books_created_at_idx ON books(created_at DESC)',
           );
+          await _createSettingsTable(db);
+        },
+        onUpgrade: (db, oldVersion, newVersion) async {
+          if (oldVersion < 2) await _createSettingsTable(db);
         },
       ),
     );
   }
+
+  Future<void> _createSettingsTable(Database db) => db.execute('''
+    CREATE TABLE app_settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    )
+  ''');
 
   Future<void> close() async {
     final opening = _opening;
