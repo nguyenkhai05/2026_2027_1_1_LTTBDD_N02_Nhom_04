@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/book_database.dart';
 import '../data/book_repository.dart';
 import '../models/book.dart';
+import '../models/app_language.dart';
 import 'add_book_screen.dart';
 import 'book_detail_screen.dart';
 import 'home_screen.dart';
@@ -12,10 +13,17 @@ import 'statistics_screen.dart';
 
 /// Shares one local repository between the available tabs.
 class AppShell extends StatefulWidget {
-  const AppShell({super.key, this.repository});
+  const AppShell({
+    super.key,
+    this.repository,
+    this.language = AppLanguage.vietnamese,
+    this.onLanguageChanged,
+  });
 
   /// Optional store for tests; the app owns its default SQLite database.
   final BookStore? repository;
+  final AppLanguage language;
+  final Future<bool> Function(AppLanguage)? onLanguageChanged;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -27,7 +35,7 @@ class _AppShellState extends State<AppShell> {
       : null;
   late final BookStore _books = widget.repository ?? BookRepository(_database!);
   int _tab = 0;
-  String _language = 'Tiếng Việt';
+  AppLanguage _language = AppLanguage.vietnamese;
 
   void _selectTab(int index) {
     if (index < 0 || index > 3 || index == _tab) return;
@@ -83,9 +91,12 @@ class _AppShellState extends State<AppShell> {
     if (_tab == 3) {
       return SettingsScreen(
         onTabSelected: _selectTab,
-        language: _language,
-        onLanguageChanged: (language) {
-          setState(() => _language = language);
+        language: widget.onLanguageChanged == null ? _language : widget.language,
+        onLanguageChanged: (language) async {
+          final save = widget.onLanguageChanged;
+          if (save != null) return save(language);
+          setState(() { _language = language; });
+          return true;
         },
       );
     }

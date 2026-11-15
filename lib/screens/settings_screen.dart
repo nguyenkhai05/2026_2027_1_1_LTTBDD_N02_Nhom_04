@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../components/home_bottom_navigation.dart';
+import '../l10n/app_text.dart';
+import '../models/app_language.dart';
 import '../theme/library_colors.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -12,8 +14,8 @@ class SettingsScreen extends StatelessWidget {
   });
 
   final ValueChanged<int> onTabSelected;
-  final String language;
-  final ValueChanged<String> onLanguageChanged;
+  final AppLanguage language;
+  final Future<bool> Function(AppLanguage) onLanguageChanged;
 
   void _openLanguage(BuildContext context) {
     Navigator.of(context).push(
@@ -45,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              const LText(
                 'Cài đặt',
                 style: TextStyle(
                   color: libraryInk,
@@ -54,21 +56,21 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
+              const LText(
                 'Nhẹ nhàng, theo cách của bạn.',
                 style: TextStyle(color: libraryMuted, fontSize: 13),
               ),
               const SizedBox(height: 24),
-              const _SectionLabel('TÙY CHỈNH'),
+              _SectionLabel(tr(context, 'TÙY CHỈNH')),
               const SizedBox(height: 12),
               _SettingsTile(
                 icon: Icons.language_outlined,
-                title: 'Ngôn ngữ',
-                subtitle: language,
+                title: tr(context, 'Ngôn ngữ'),
+                subtitle: language.label,
                 onTap: () => _openLanguage(context),
               ),
               const SizedBox(height: 20),
-              const _SectionLabel('VỀ ỨNG DỤNG'),
+              _SectionLabel(tr(context, 'VỀ ỨNG DỤNG')),
               const SizedBox(height: 12),
               Container(
                 width: double.infinity,
@@ -99,12 +101,12 @@ class SettingsScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 14),
-                    const Text(
+                    const LText(
                       'Thư viện cá nhân, luôn bên bạn.',
                       style: TextStyle(color: libraryMuted, fontSize: 13),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    const LText(
                       'Quản lý sách và theo dõi tiến độ đọc.',
                       style: TextStyle(color: libraryMuted, fontSize: 13),
                     ),
@@ -114,11 +116,11 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 16),
               _SettingsTile(
                 icon: Icons.info_outline,
-                title: 'Thông tin nhóm',
+                title: tr(context, 'Thông tin nhóm'),
                 onTap: () => _openAboutTeam(context),
               ),
               const SizedBox(height: 18),
-              const Text(
+              const LText(
                 'Một góc đọc, của riêng bạn.',
                 style: TextStyle(color: libraryMuted, fontSize: 11),
               ),
@@ -217,14 +219,36 @@ class _SettingsTile extends StatelessWidget {
   }
 }
 
-class _LanguageScreen extends StatelessWidget {
+class _LanguageScreen extends StatefulWidget {
   const _LanguageScreen({
     required this.selectedLanguage,
     required this.onLanguageChanged,
   });
 
-  final String selectedLanguage;
-  final ValueChanged<String> onLanguageChanged;
+  final AppLanguage selectedLanguage;
+  final Future<bool> Function(AppLanguage) onLanguageChanged;
+
+  @override
+  State<_LanguageScreen> createState() => _LanguageScreenState();
+}
+
+class _LanguageScreenState extends State<_LanguageScreen> {
+  bool _saving = false;
+
+  Future<void> _select(AppLanguage language) async {
+    if (_saving) return;
+    setState(() { _saving = true; });
+    final saved = await widget.onLanguageChanged(language);
+    if (!mounted) return;
+    if (saved) {
+      Navigator.of(context).pop();
+    } else {
+      setState(() { _saving = false; });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: LText('Không thể lưu ngôn ngữ. Hãy thử lại.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,34 +257,33 @@ class _LanguageScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F6F0),
         surfaceTintColor: Colors.transparent,
-        title: const Text('Ngôn ngữ'),
+        title: const LText('Ngôn ngữ'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Chọn ngôn ngữ hiển thị trong ứng dụng',
+            const LText(
+              'Ngôn ngữ của bạn',
+              style: TextStyle(color: libraryInk, fontSize: 19, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const LText(
+              'Chọn ngôn ngữ hiển thị trong ứng dụng. Tên sách và tác giả sẽ được giữ nguyên.',
               style: TextStyle(color: libraryMuted, fontSize: 13),
             ),
             const SizedBox(height: 20),
             _LanguageOption(
               label: 'Tiếng Việt',
-              selected: selectedLanguage == 'Tiếng Việt',
-              onTap: () {
-                onLanguageChanged('Tiếng Việt');
-                Navigator.pop(context);
-              },
+              selected: widget.selectedLanguage == AppLanguage.vietnamese,
+              onTap: _saving ? null : () => _select(AppLanguage.vietnamese),
             ),
             const SizedBox(height: 12),
             _LanguageOption(
               label: 'English',
-              selected: selectedLanguage == 'English',
-              onTap: () {
-                onLanguageChanged('English');
-                Navigator.pop(context);
-              },
+              selected: widget.selectedLanguage == AppLanguage.english,
+              onTap: _saving ? null : () => _select(AppLanguage.english),
             ),
           ],
         ),
@@ -278,7 +301,7 @@ class _LanguageOption extends StatelessWidget {
 
   final String label;
   final bool selected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
